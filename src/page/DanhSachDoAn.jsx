@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, Filter, Star, Eye, Download, SlidersHorizontal, X, ChevronRight, LayoutGrid, List, Clock } from 'lucide-react'
+import SEO from '../components/SEO'
 import { db } from '../lib/firebase'
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
 
@@ -63,7 +64,11 @@ export default function DanhSachDoAn() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fafafa] pb-20">
+    <div className="min-h-screen bg-white pb-20">
+      <SEO
+        title="Kho Đồ Án"
+        description="Khám phá kho đồ án đa dạng với nhiều công nghệ hiện đại: Web, App, AI. Giải pháp tối ưu cho sinh viên và lập trình viên."
+      />
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
         {/* Page Header */}
         <div className="mb-16 animate-fade-in text-center lg:text-left">

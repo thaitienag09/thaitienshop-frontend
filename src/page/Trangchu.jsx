@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Star, Shield, Zap, Globe, Cpu, Layers, BarChart3, ChevronRight } from 'lucide-react'
+import SEO from '../components/SEO'
 
 export default function Trangchu() {
   const bentoItems = [
@@ -35,6 +36,10 @@ export default function Trangchu() {
 
   return (
     <div className="min-h-screen bg-[#fafafa]">
+      <SEO
+        title="Trang chủ"
+        description="Chào mừng bạn đến với thaitienshop. Nền tảng cung cấp giải pháp đồ án chuyên nghiệp, giúp bạn bứt phá trong sự nghiệp lập trình."
+      />
       {/* Hero Section - Dark & Impactful */}
       <section className="relative pt-40 pb-32 bg-[#0f172a] overflow-hidden">
         {/* Advanced Background Elements */}

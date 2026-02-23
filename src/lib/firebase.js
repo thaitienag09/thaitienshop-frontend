@@ -5,14 +5,14 @@ import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAPURqNXE86MvgqZHLFlIbs2fN2SdRO7qk",
-    authDomain: "shopdoanthaitien.firebaseapp.com",
-    projectId: "shopdoanthaitien",
-    storageBucket: "shopdoanthaitien.firebasestorage.app",
-    messagingSenderId: "545068453271",
-    appId: "1:545068453271:web:5a5d70bb4afb0d2e47c8d2",
-    measurementId: "G-FP65FV0KS1",
-    databaseURL: "https://shopdoanthaitien-default-rtdb.asia-southeast1.firebasedatabase.app"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+    databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL
 };
 
 // Initialize Firebase

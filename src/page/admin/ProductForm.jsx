@@ -30,8 +30,8 @@ const CATEGORIES = [
 ];
 
 // Cloudinary Configuration (Unsigned Upload)
-const CLOUDINARY_CLOUD_NAME = 'davrfoeot';
-const CLOUDINARY_UPLOAD_PRESET = 'thaitienshop';
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
 export default function ProductForm() {
     const { id } = useParams();

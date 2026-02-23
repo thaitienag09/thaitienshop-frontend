@@ -4,6 +4,7 @@ import { Star, Download, Eye, CheckCircle, Clock, ChevronLeft, Share2, ShieldChe
 import { db } from '../lib/firebase'
 import { doc, getDoc } from 'firebase/firestore'
 import PaymentModal from '../components/PaymentModal'
+import SEO from '../components/SEO'
 
 export default function ChiTietDoAn() {
   const { id } = useParams()
@@ -68,7 +69,12 @@ export default function ChiTietDoAn() {
   ]
 
   return (
-    <div className="min-h-screen bg-surface-muted pb-20">
+    <div className="min-h-screen bg-[#fafafa]">
+      <SEO
+        title={project.title}
+        description={project.description?.substring(0, 160)}
+        ogImage={project.image}
+      />
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
         {/* Navigation & Actions */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 space-y-6 md:space-y-0">
