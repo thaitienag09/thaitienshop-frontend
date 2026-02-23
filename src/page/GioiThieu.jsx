@@ -80,80 +80,37 @@ export default function GioiThieu() {
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/20 rounded-full blur-[120px] pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className={`space-y-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <div className="inline-flex items-center space-x-3 px-4 py-2 bg-white/5 rounded-full border border-white/10">
+          <div className="max-w-4xl mx-auto text-center space-y-10 transition-all duration-1000">
+            <div className={`space-y-8 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+              <div className="inline-flex items-center space-x-3 px-4 py-2 bg-white/5 rounded-full border border-white/10 mx-auto">
                 <div className="w-2 h-2 bg-accent rounded-full"></div>
                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/70">Expert Developer Profile</span>
               </div>
 
-              <h1 className="text-5xl sm:text-7xl font-black text-white tracking-tighter leading-none">
+              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-none">
                 GIỚI THIỆU <br />
                 <span className="text-accent underline decoration-white/10 underline-offset-8 transition-colors duration-500 hover:text-white">
                   THAITIENSHOP
                 </span>
               </h1>
 
-              <p className="text-lg text-white/50 max-w-xl font-medium leading-relaxed italic">
+              <p className="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto font-medium leading-relaxed italic">
                 Cung cấp hệ sinh thái giải pháp lập trình chất lượng cao, chuyên sâu vào hệ thống quản lý doanh nghiệp (ERP) và thương mại điện tử.
               </p>
 
-              <div className="flex items-center space-x-6">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
                 <Link
                   to="/projects"
-                  className="bg-white text-primary px-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-premium hover:shadow-glow hover:-translate-y-1 transition-all duration-500"
+                  className="w-full sm:w-auto bg-white text-primary px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-premium hover:shadow-glow hover:-translate-y-1 transition-all duration-500"
                 >
                   XEM THƯ VIỆN DỰ ÁN
                 </Link>
                 <a
                   href="#contact"
-                  className="text-white/70 hover:text-white font-black text-xs uppercase tracking-widest flex items-center transition-colors"
+                  className="w-full sm:w-auto text-white/70 hover:text-white font-black text-xs uppercase tracking-widest flex items-center justify-center transition-colors px-10 py-5 border border-white/10 rounded-2xl bg-white/5"
                 >
                   LIÊN HỆ TƯ VẤN <ArrowRight className="ml-2 h-4 w-4" />
                 </a>
-              </div>
-            </div>
-
-            <div className={`relative transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-              <div className="relative group">
-                <div className="absolute -inset-4 bg-accent/10 rounded-[3rem] blur-3xl group-hover:bg-accent/20 transition-all duration-700"></div>
-                <div className="relative glass p-10 rounded-[3rem] border border-white/20 aspect-square flex items-center justify-center overflow-hidden shadow-glow">
-                  {/* Geometric Circuit Branding */}
-                  <div className="relative w-full h-full flex items-center justify-center">
-                    <svg viewBox="0 0 200 200" className="w-full h-full opacity-40">
-                      <defs>
-                        <linearGradient id="circuit-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.2" />
-                          <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
-                        </linearGradient>
-                      </defs>
-                      {/* Connection Lines */}
-                      <path d="M40,100 L160,100 M100,40 L100,160 M60,60 L140,140 M140,60 L60,140" stroke="white" strokeWidth="0.5" strokeDasharray="4 4" />
-                      {/* Circles */}
-                      <circle cx="100" cy="100" r="40" fill="url(#circuit-grad)" stroke="white" strokeWidth="0.5" />
-                      <circle cx="100" cy="100" r="60" fill="none" stroke="white" strokeWidth="0.2" />
-                      <circle cx="100" cy="100" r="80" fill="none" stroke="white" strokeWidth="0.1" strokeDasharray="10 5" />
-
-                      {/* Nodes */}
-                      {[
-                        { x: 40, y: 100 }, { x: 160, y: 100 }, { x: 100, y: 40 }, { x: 100, y: 160 },
-                        { x: 60, y: 60 }, { x: 140, y: 140 }, { x: 140, y: 60 }, { x: 60, y: 140 }
-                      ].map((p, i) => (
-                        <circle key={i} cx={p.x} cy={p.y} r="3" fill="white" className="animate-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
-                      ))}
-                    </svg>
-
-                    <div className="relative z-10 flex flex-col items-center">
-                      <div className="w-20 h-20 bg-white shadow-2xl rounded-2xl flex items-center justify-center mb-4 transform rotate-45 group-hover:rotate-[225deg] transition-all duration-1000">
-                        <Code className="h-10 w-10 text-primary -rotate-45 group-hover:rotate-[135deg] transition-all duration-1000" />
-                      </div>
-                      <div className="text-center">
-                        <p className="text-white font-black text-xl tracking-widest">TS</p>
-                        <div className="h-1 w-8 bg-accent mx-auto mt-1 rounded-full"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
