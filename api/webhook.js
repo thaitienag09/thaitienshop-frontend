@@ -34,15 +34,18 @@ export default async function handler(req, res) {
 
             // 1. Cập nhật Firebase
             try {
-                await update(ref(db, `transactions/${transactionId}`), {
+                const txPath = `transactions/${transactionId}`;
+                console.log(`📡 Cập nhật Firebase tại: ${txPath} với status: ${status}`);
+
+                await update(ref(db, txPath), {
                     status: status,
                     updatedAt: Date.now()
                 });
 
                 // 2. Phản hồi lại Telegram (Sửa tin nhắn để báo đã bấm)
                 const responseText = action === 'confirm'
-                    ? `✅ GIAO DỊCH ĐÃ ĐƯỢC XÁC NHẬN\n\nMã: ${transactionId}\nKhách đã nhận được thông báo thành công trên Web.`
-                    : `❌ GIAO DỊCH ĐÃ BỊ HỦY\n\nMã: ${transactionId}`;
+                    ? `✅ XÁC NHẬN THÀNH CÔNG\n\n🆔 Mã: \`${transactionId}\`\n💻 Trạng thái: Đã cập nhật lên Web.`
+                    : `❌ ĐÃ HỦY GIAO DỊCH\n\n🆔 Mã: \`${transactionId}\``;
 
                 const botToken = '8716710838:AAFBO26c5u-yvR4wkoSSRmNYertmyl5LNmc';
                 await fetch(`https://api.telegram.org/bot${botToken}/editMessageText`, {
@@ -56,10 +59,10 @@ export default async function handler(req, res) {
                     })
                 });
 
-                return res.status(200).json({ ok: true });
+                return res.status(200).json({ ok: true, transactionId });
             } catch (error) {
-                console.error('Lỗi Webhook:', error);
-                return res.status(500).json({ error: 'Internal Server Error' });
+                console.error('❌ Lỗi Webhook Firebase:', error);
+                return res.status(500).json({ error: error.message });
             }
         }
     }

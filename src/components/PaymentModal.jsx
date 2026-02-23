@@ -31,9 +31,10 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
     // Lắng nghe sự thay đổi từ Firebase khi ở bước Verifying
     useEffect(() => {
         if (paymentStep === 3 && transactionId) {
-            const statusRef = ref(db, `transactions/${transactionId}/status`);
+            console.log("🔥 Đang lắng nghe Firebase:", `transactions/${transactionId}/status`);
             const unsubscribe = onValue(statusRef, (snapshot) => {
                 const status = snapshot.val();
+                console.log("📡 Trạng thái cập nhật từ Firebase:", status);
                 if (status === 'success') {
                     setPaymentStep(4);
                 } else if (status === 'failed') {
@@ -233,9 +234,12 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
                         <p className="text-gray-500 max-w-sm leading-relaxed mb-8 font-medium">
                             Hệ thống sẽ tự động cập nhật ngay khi Admin nhấn nút xác nhận trên Telegram.
                         </p>
-                        <div className="p-4 bg-gray-50 rounded-2xl flex items-center space-x-3 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                            <div className="h-2 w-2 bg-yellow-400 rounded-full animate-ping"></div>
-                            <span>Bạn vui lòng không tắt màn hình này</span>
+                        <div className="p-4 bg-gray-50 rounded-2xl flex flex-col items-center space-y-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                            <div className="flex items-center space-x-3">
+                                <div className="h-2 w-2 bg-yellow-400 rounded-full animate-ping"></div>
+                                <span>Bạn vui lòng không tắt màn hình này</span>
+                            </div>
+                            <span className="opacity-50">Mã GD: {transactionId}</span>
                         </div>
                     </div>
                 )}
