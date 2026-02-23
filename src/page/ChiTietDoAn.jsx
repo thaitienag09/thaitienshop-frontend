@@ -6,59 +6,66 @@ export default function ChiTietDoAn() {
   const { id } = useParams()
   const [activeTab, setActiveTab] = useState('description')
 
-  const project = {
-    id: 1,
-    title: "Hệ thống Quản lý Cửa hàng Thú y (PetCare)",
-    description: "Giải pháp toàn diện quản lý cửa hàng thú y: quản lý hồ sơ thú cưng, lịch hẹn tiêm phòng, kho thuốc và hóa đơn thanh toán.",
-    fullDescription: `Dự án PetCare là một hệ thống quản lý chuyên sâu cho các phòng khám và cửa hàng thú y. Hệ thống giúp số hóa quy trình quản lý, từ việc tiếp nhận thú cưng đến việc theo dõi bệnh lý và quản lý kinh doanh.
+  const projects = {
+    'shop-mon-an': {
+      id: 'shop-mon-an',
+      title: 'Hệ thống Đặt đồ ăn trực tuyến Shop Món Ăn (MERN Stack)',
+      description: 'Hệ thống thương mại điện tử hoàn chỉnh cho lĩnh vực ẩm thực với đầy đủ tính năng đặt món, quản lý giỏ hàng và admin backend.',
+      fullDescription: `Shop Món Ăn là đồ án Fullstack chuyên nghiệp được xây dựng trên nền tảng MERN Stack (MongoDB, Express, React, Node.js), cung cấp một giải pháp toàn diện cho việc kinh doanh đồ ăn trực tuyến.
 
-## Điểm nhấn công nghệ:
-- **Cơ sở dữ liệu MySQL**: Thiết kế chuẩn hóa giúp lưu trữ dữ liệu an toàn và truy xuất nhanh chóng.
-- **Quản lý hồ sơ**: Lưu trữ thông tin chi tiết về thú cưng, lịch sử khám bệnh và tiêm chủng.
-- **Hệ thống kho**: Tự động theo dõi tồn kho thuốc và các sản phẩm chăm sóc thú cưng.
-- **Báo cáo tài chính**: Thống kê doanh thu, chi phí và lợi nhuận theo thời gian thực.
+## Tính năng nổi bật của dự án:
+- **Giao diện người dùng (Frontend)**: Thiết kế hiện đại, responsive hoàn toàn trên mọi thiết bị.
+- **Quản lý thực đơn**: Hiển thị danh sách món ăn theo danh mục, tính năng tìm kiếm và lọc thông minh.
+- **Giỏ hàng & Đặt hàng**: Quy trình thêm món, cập nhật số lượng và đặt hàng mượt mà.
+- **Trang Quản trị (Admin Panel)**: Quản lý món ăn (Thêm/Sửa/Xóa), quản lý trạng thái đơn hàng.
+- **Bảo mật**: Hệ thống xác thực người dùng sử dụng JWT, bảo mật dữ liệu khách hàng.
 
-## Danh sách tính năng:
-- **Quản lý khách hàng**: Lưu trữ thông tin chủ nuôi và liên kết với hồ sơ thú cưng.
-- **Lịch hẹn thông minh**: Hệ thống nhắc lịch tiêm phòng và tái khám tự động qua email/SMS.
-- **Quản lý bán hàng**: Tích hợp quét mã vạch và in hóa đơn chuyên nghiệp.
-- **Phân quyền người dùng**: Quản lý nhân viên với các quyền hạn khác nhau theo chức năng công việc.
+## Cấu trúc dự án:
+- **Backend API**: Node.js & Express.js xử lý logic nghiệp vụ và kết nối Database.
+- **Frontend Client**: React.js kết hợp Vite cho tốc độ tải trang cực nhanh.
+- **Database**: MongoDB lưu trữ dữ liệu món ăn, người dùng và đơn hàng linh hoạt.
 
 ## Stack Công nghệ:
-- **Ngôn ngữ**: PHP 8.2+, Laravel 10/11 Framework.
-- **Cơ sở dữ liệu**: MySQL 8.0 chuẩn hóa.
-- **Frontend**: Blade Template hoặc React (Inertia.js) phối hợp Tailwind CSS.
-- **Báo cáo**: Laravel Excel hoặc DomPDF hỗ trợ xuất hóa đơn.`,
-    price: "199,000",
-    originalPrice: "299,000",
-    rating: 5.0,
-    reviews: 45,
-    downloads: 120,
-    image: "https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=1000&h=600&fit=crop",
-    category: "Store Management",
-    author: {
-      name: "thaitienshop",
-      avatar: "/avtar.png",
+- **Frontend**: React.js, Tailwind CSS, Lucide Icons
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB (Atlas/Local)
+- **Auth**: JWT (JSON Web Token)`,
+      price: "200.000",
+      originalPrice: "300.000",
       rating: 5.0,
-      projects: 50
-    },
-    createdAt: "2024-02-20",
-    updatedAt: "2024-02-23",
-    tags: ["PHP", "Laravel", "MySQL", "Pet Management"],
-    requirements: [
-      "PHP >= 8.2 & Composer",
-      "MySQL Server 8.0+",
-      "Apache/Nginx (XAMPP/Laragon)",
-      "Trình duyệt hiện đại (Chrome, Edge)"
-    ],
-    includes: [
-      "Trọn bộ Source Code Laravel Project",
-      "File Script Database MySQL chuẩn (.sql)",
-      "Tài liệu hướng dẫn cấu hình môi trường (.env)",
-      "Báo cáo đồ án chi tiết (Word/PDF)",
-      "Hỗ trợ cài đặt & fix lỗi 1:1 qua Ultraview"
-    ]
+      reviews: 88,
+      downloads: 125,
+      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1000&h=600&fit=crop",
+      category: "Web Development",
+      author: {
+        name: "thaitienshop",
+        avatar: "/avtar.png",
+        rating: 5.0,
+        projects: 20
+      },
+      createdAt: "2024-05-15",
+      updatedAt: "2024-05-20",
+      tags: ["React.js", "Node.js", "MongoDB", "JWT"],
+      previews: [
+        { title: "Giao diện Trang chủ", image: "/tranghome.png" },
+        { title: "Giao diện Quản trị (Admin)", image: "/admin.png" }
+      ],
+      requirements: [
+        "Node.js phiên bản 18 trở lên",
+        "MongoDB (Local hoặc Atlas)",
+        "Trình duyệt Web hiện đại (Chrome/Edge)",
+        "NPM hoặc Yarn để cài đặt thư viện"
+      ],
+      includes: [
+        "Full Source Code (Frontend, Backend, Admin)",
+        "Cơ sở dữ liệu MongoDB chuẩn hóa",
+        "Hướng dẫn cài đặt chi tiết (File MD)",
+        "Hỗ trợ kỹ thuật qua Ultraview/Zalo"
+      ]
+    }
   }
+
+  const project = projects[id] || projects['shop-mon-an'] // Fallback for documentation
 
   const reviews = [
     {
@@ -130,6 +137,7 @@ export default function ChiTietDoAn() {
                 <div className="flex space-x-10 border-b border-gray-100 mb-10 overflow-x-auto">
                   {[
                     { id: 'description', label: 'TỔNG QUAN GIẢI PHÁP' },
+                    { id: 'previews', label: 'HÌNH ẢNH GIAO DIỆN' },
                     { id: 'requirements', label: 'YÊU CẦU TRIỂN KHAI' },
                     { id: 'includes', label: 'GÓI TÀI SẢN' },
                     { id: 'reviews', label: 'PHẢN HỒI KHÁCH HÀNG' }
@@ -152,6 +160,25 @@ export default function ChiTietDoAn() {
                       <div className="whitespace-pre-line">
                         {project.fullDescription}
                       </div>
+                    </div>
+                  )}
+
+                  {activeTab === 'previews' && (
+                    <div className="space-y-12">
+                      {project.previews?.map((preview, index) => (
+                        <div key={index} className="space-y-4">
+                          <h3 className="text-lg font-black text-primary uppercase tracking-widest border-l-4 border-accent pl-4">
+                            {preview.title}
+                          </h3>
+                          <div className="rounded-[2rem] overflow-hidden shadow-premium border border-gray-100 group">
+                            <img
+                              src={preview.image}
+                              alt={preview.title}
+                              className="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-700"
+                            />
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   )}
 
@@ -233,11 +260,11 @@ export default function ChiTietDoAn() {
 
               <div className="px-6 py-6 bg-amber-50 rounded-2xl border border-amber-100 mb-10">
                 <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2 text-center flex items-center justify-center">
-                  <Clock className="h-4 w-4 mr-2" /> ĐANG PHÁT TRIỂN
+                  <ShieldCheck className="h-4 w-4 mr-2" /> SẴN SÀNG CHUYỂN GIAO
                 </p>
                 <p className="text-xs text-amber-700/70 text-center font-bold leading-relaxed">
-                  Hệ thống PetCare đang được hoàn thiện mã nguồn. <br />
-                  Chức năng tải code tạm thời bị khóa.
+                  Đồ án Shop Món Ăn đã hoàn thiện và kiểm thử lỗi. <br />
+                  Vui lòng liên hệ để được hỗ trợ cài đặt.
                 </p>
               </div>
 

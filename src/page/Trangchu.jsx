@@ -138,6 +138,57 @@ export default function Trangchu() {
         </div>
       </section>
 
+      {/* Flagship Solution Showcase */}
+      <section className="py-32 bg-[#f8fafc]">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-accent/10 rounded-[4rem] blur-3xl group-hover:bg-accent/20 transition-all duration-700"></div>
+              <div className="relative rounded-[4rem] overflow-hidden shadow-premium border border-white/20">
+                <img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=800&h=800&fit=crop" alt="PetCare System" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent"></div>
+              </div>
+            </div>
+
+            <div className="space-y-10">
+              <div className="inline-flex items-center space-x-3 px-5 py-2 bg-accent/5 rounded-full border border-accent/10">
+                <Star className="h-4 w-4 text-accent fill-current" />
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-accent">Dự án tiêu biểu</span>
+              </div>
+
+              <h2 className="text-5xl sm:text-7xl font-black text-primary tracking-tighter leading-none uppercase">
+                HỆ THỐNG <br />
+                <span className="text-gray-300 italic">PETCARE FOUNDATION</span>
+              </h2>
+
+              <p className="text-gray-500 text-lg leading-relaxed font-medium italic">
+                Bộ mã nguồn nền tảng với kiến trúc Laravel 10+ chuẩn mực, tích hợp sẵn khung thanh toán đa kênh và luồng xử lý đơn hàng cơ bản.
+              </p>
+
+              <div className="grid grid-cols-2 gap-6">
+                {[
+                  { label: 'Thanh toán', value: 'VNPAY / Stripe' },
+                  { label: 'Nền tảng', value: 'Laravel 10+' },
+                  { label: 'Bảo mật', value: 'Chuẩn Enterprise' },
+                  { label: 'Tốc độ', value: '< 200ms' }
+                ].map((stat, i) => (
+                  <div key={i} className="space-y-1">
+                    <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest">{stat.label}</p>
+                    <p className="text-lg font-black text-primary tracking-tighter">{stat.value}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-6">
+                <Link to="/project/vet-management" className="inline-flex items-center px-12 py-5 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-premium hover:shadow-glow hover:-translate-y-1 transition-all">
+                  Chi tiết giải pháp <ArrowRight className="ml-3 h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Trusted By - Minimalist Branding */}
       <section className="py-32 bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 text-center">

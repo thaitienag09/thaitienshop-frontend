@@ -135,6 +135,80 @@ export default function GioiThieu() {
         </div>
       </section>
 
+      {/* Featured Project - PetCare Veterinary System */}
+      <section className="py-32 bg-[#f8fafc] overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="bg-[#0f172a] rounded-[4rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row relative">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 blur-[100px]"></div>
+
+            <div className="lg:w-1/2 p-12 sm:p-20 space-y-10 relative z-10">
+              <div className="inline-flex items-center space-x-3 text-accent">
+                <Terminal className="h-5 w-5" />
+                <span className="text-[10px] font-black uppercase tracking-[0.4em]">Core Architecture Beta</span>
+              </div>
+
+              <h3 className="text-4xl sm:text-6xl font-black text-white tracking-tighter leading-none uppercase">
+                PETCARE <br />
+                <span className="text-accent underline decoration-white/10 underline-offset-8">FOUNDATION</span> SYSTEM
+              </h3>
+
+              <p className="text-white/40 text-sm font-medium leading-relaxed italic">
+                Khung quản lý thú y hiện đại được xây dựng trên nền tảng Laravel. Hệ thống hiện đang tập trung vào các luồng xử lý giỏ hàng, đặt hàng và tích hợp khung thanh toán chuẩn.
+              </p>
+
+              <div className="space-y-4">
+                {[
+                  'Khung thanh toán: VNPAY (nội địa) & Stripe (quốc tế) đã sẵn sàng.',
+                  'Quản lý giỏ hàng và danh mục sản phẩm hoàn chỉnh.',
+                  'Hồ sơ người dùng và hệ thống Auth bảo mật.',
+                  'Module Blog & Bài viết đang được hoàn thiện các tính năng phụ.'
+                ].map((feature, i) => (
+                  <div key={i} className="flex items-center space-x-4 text-white/70 text-xs font-bold">
+                    <CheckCircle className="h-4 w-4 text-accent shrink-0" />
+                    <span>{feature}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-8">
+                <Link to="/project/vet-management" className="inline-flex items-center text-white font-black text-[10px] uppercase tracking-widest group border-b-2 border-accent pb-2">
+                  Khám phá kiến trúc hệ thống <ArrowRight className="ml-3 h-4 w-4 group-hover:translate-x-2 transition-transform duration-500" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:w-1/2 bg-accent/5 p-12 flex items-center justify-center border-l border-white/5">
+              <div className="relative w-full aspect-square max-w-md">
+                <div className="absolute inset-0 bg-accent/20 rounded-[3rem] blur-3xl animate-pulse"></div>
+                <div className="relative glass-dark p-10 rounded-[3rem] border border-white/10 h-full flex flex-col justify-between">
+                  {/* Tech Stack Visualization */}
+                  <div className="space-y-8">
+                    <div className="flex justify-between items-center opacity-40">
+                      <div className="h-2 w-12 bg-white rounded-full"></div>
+                      <div className="h-2 w-24 bg-white/20 rounded-full"></div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      {['Laravel 10', 'MySQL PRO', 'VNPAY API', 'Stripe SDK'].map((tech, i) => (
+                        <div key={i} className="p-4 bg-white/5 border border-white/5 rounded-2xl text-[10px] font-black text-white/50 text-center uppercase tracking-widest">
+                          {tech}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="mt-auto flex items-end justify-between">
+                    <div>
+                      <p className="text-[3rem] font-black text-white tracking-tighter leading-none">500+</p>
+                      <p className="text-[10px] font-black text-accent uppercase tracking-widest">Giao dịch đã xử lý</p>
+                    </div>
+                    <ShieldCheck className="h-16 w-16 text-accent/20" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Philosophy Section */}
       <section className="bg-white py-32 border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
