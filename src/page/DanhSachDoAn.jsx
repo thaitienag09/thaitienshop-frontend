@@ -21,14 +21,14 @@ export default function DanhSachDoAn() {
       id: 'shop-mon-an',
       title: 'Hệ thống Đặt đồ ăn trực tuyến Shop Món Ăn (MERN Stack)',
       description: 'Đồ án Fullstack hoàn chỉnh: Đặt món, Giỏ hàng, Quản lý đơn hàng. Tích hợp trang Admin quản trị món ăn. Giao diện hiện đại, mượt mà và tối ưu hóa trải nghiệm người dùng.',
-      price: '200.000',
+      price: '100.000',
       originalPrice: '300.000',
       category: 'web',
       tags: ['React.js', 'Node.js', 'MongoDB', 'JWT'],
       rating: 5.0,
       downloads: 88,
       createdAt: '2024-05-15',
-      image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=450&fit=crop'
+      image: '/tranghome.png'
     }
   ]
 

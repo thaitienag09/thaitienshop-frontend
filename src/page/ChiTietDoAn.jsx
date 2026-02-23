@@ -1,71 +1,16 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Star, Download, Eye, CheckCircle, Clock, ChevronLeft, Share2, ShieldCheck, Zap, MessageSquare, ChevronRight } from 'lucide-react'
+import { Star, Download, Eye, CheckCircle, Clock, ChevronLeft, Share2, ShieldCheck, MessageSquare, ChevronRight, QrCode, Zap } from 'lucide-react'
+import { projects } from '../data/projects'
+import PaymentModal from '../components/PaymentModal'
 
 export default function ChiTietDoAn() {
   const { id } = useParams()
   const [activeTab, setActiveTab] = useState('description')
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
+  const [guestEmail, setGuestEmail] = useState('')
 
-  const projects = {
-    'shop-mon-an': {
-      id: 'shop-mon-an',
-      title: 'Hệ thống Đặt đồ ăn trực tuyến Shop Món Ăn (MERN Stack)',
-      description: 'Hệ thống thương mại điện tử hoàn chỉnh cho lĩnh vực ẩm thực với đầy đủ tính năng đặt món, quản lý giỏ hàng và admin backend.',
-      fullDescription: `Shop Món Ăn là đồ án Fullstack chuyên nghiệp được xây dựng trên nền tảng MERN Stack (MongoDB, Express, React, Node.js), cung cấp một giải pháp toàn diện cho việc kinh doanh đồ ăn trực tuyến.
-
-## Tính năng nổi bật của dự án:
-- **Giao diện người dùng (Frontend)**: Thiết kế hiện đại, responsive hoàn toàn trên mọi thiết bị.
-- **Quản lý thực đơn**: Hiển thị danh sách món ăn theo danh mục, tính năng tìm kiếm và lọc thông minh.
-- **Giỏ hàng & Đặt hàng**: Quy trình thêm món, cập nhật số lượng và đặt hàng mượt mà.
-- **Trang Quản trị (Admin Panel)**: Quản lý món ăn (Thêm/Sửa/Xóa), quản lý trạng thái đơn hàng.
-- **Bảo mật**: Hệ thống xác thực người dùng sử dụng JWT, bảo mật dữ liệu khách hàng.
-
-## Cấu trúc dự án:
-- **Backend API**: Node.js & Express.js xử lý logic nghiệp vụ và kết nối Database.
-- **Frontend Client**: React.js kết hợp Vite cho tốc độ tải trang cực nhanh.
-- **Database**: MongoDB lưu trữ dữ liệu món ăn, người dùng và đơn hàng linh hoạt.
-
-## Stack Công nghệ:
-- **Frontend**: React.js, Tailwind CSS, Lucide Icons
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB (Atlas/Local)
-- **Auth**: JWT (JSON Web Token)`,
-      price: "200.000",
-      originalPrice: "300.000",
-      rating: 5.0,
-      reviews: 88,
-      downloads: 125,
-      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1000&h=600&fit=crop",
-      category: "Web Development",
-      author: {
-        name: "thaitienshop",
-        avatar: "/avtar.png",
-        rating: 5.0,
-        projects: 20
-      },
-      createdAt: "2024-05-15",
-      updatedAt: "2024-05-20",
-      tags: ["React.js", "Node.js", "MongoDB", "JWT"],
-      previews: [
-        { title: "Giao diện Trang chủ", image: "/tranghome.png" },
-        { title: "Giao diện Quản trị (Admin)", image: "/admin.png" }
-      ],
-      requirements: [
-        "Node.js phiên bản 18 trở lên",
-        "MongoDB (Local hoặc Atlas)",
-        "Trình duyệt Web hiện đại (Chrome/Edge)",
-        "NPM hoặc Yarn để cài đặt thư viện"
-      ],
-      includes: [
-        "Full Source Code (Frontend, Backend, Admin)",
-        "Cơ sở dữ liệu MongoDB chuẩn hóa",
-        "Hướng dẫn cài đặt chi tiết (File MD)",
-        "Hỗ trợ kỹ thuật qua Ultraview/Zalo"
-      ]
-    }
-  }
-
-  const project = projects[id] || projects['shop-mon-an'] // Fallback for documentation
+  const project = projects[id] || projects['shop-mon-an']
 
   const reviews = [
     {
@@ -235,9 +180,10 @@ export default function ChiTietDoAn() {
           </div>
 
           {/* Sidebar Area */}
-          <div className="lg:col-span-4 space-y-8">
+          <div className="lg:col-span-4">
             {/* Purchase Card */}
-            <div className="glass p-10 rounded-[3rem] shadow-premium sticky top-32 border border-white/50">
+            <div className="bg-white p-10 rounded-[3rem] shadow-premium border border-gray-100 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-2 bg-accent"></div>
               <div className="mb-10 text-center lg:text-left">
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mb-3 block">Mức giá sở hữu</span>
                 <div className="flex items-center justify-center lg:justify-start space-x-4">
@@ -249,10 +195,14 @@ export default function ChiTietDoAn() {
               </div>
 
               <div className="space-y-4 mb-8">
-                <button disabled className="w-full bg-gray-200 text-gray-400 py-5 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center cursor-not-allowed">
-                  CHƯA SẴN DÙNG
+                <button
+                  onClick={() => setIsPaymentModalOpen(true)}
+                  className="w-full bg-blue-600 text-white py-6 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center hover:bg-blue-700 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  <QrCode className="h-5 w-5 mr-3" />
+                  MUA NGAY (QUÉT MÃ QR)
                 </button>
-                <button className="w-full bg-white text-primary border border-gray-100 py-5 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center hover:bg-surface-muted transition-all duration-300">
+                <button className="w-full bg-surface-muted text-primary border border-gray-100 py-6 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center hover:bg-gray-100 transition-all duration-300">
                   <MessageSquare className="h-5 w-5 mr-3" />
                   GỬI YÊU CẦU TƯ VẤN
                 </button>
@@ -326,6 +276,14 @@ export default function ChiTietDoAn() {
           </div>
         </div>
       </div>
+
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+        project={project}
+        guestEmail={guestEmail}
+        setGuestEmail={setGuestEmail}
+      />
     </div>
   )
 }
