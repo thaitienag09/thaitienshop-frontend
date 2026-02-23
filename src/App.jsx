@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
+import ScrollToTop from './components/ScrollToTop'
 import Trangchu from './page/Trangchu'
 import DanhSachDoAn from './page/DanhSachDoAn'
 import ChiTietDoAn from './page/ChiTietDoAn'
@@ -12,6 +13,7 @@ import GioiThieu from './page/GioiThieu'
 export default function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 pt-24">
