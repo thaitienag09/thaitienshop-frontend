@@ -1,103 +1,93 @@
 import { Link } from 'react-router-dom'
-import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from 'lucide-react'
+import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, Clock } from 'lucide-react'
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-primary text-white">
+      <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 py-20">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-16">
           {/* Company Info */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">T</span>
+          <div className="space-y-8">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-white flex items-center justify-center rounded-xl shadow-premium">
+                <span className="text-primary font-black text-xl">S</span>
               </div>
-              <span className="text-xl font-bold">TiếnCode</span>
+              <span className="text-2xl font-black tracking-tighter">thaitienshop</span>
             </div>
-            <p className="text-gray-400 text-sm">
-              Nền tảng bán đồ án CNTT chất lượng cao của Tiến. 
-              Đồ án được tạo ra với kinh nghiệm và kiến thức chuyên sâu.
+            <p className="text-white/60 text-sm leading-relaxed italic">
+              "Giải pháp công nghệ tối ưu cho doanh nghiệp và chuyên gia lập trình. Kiến tạo tương lai qua từng dòng code."
             </p>
-            <div className="flex space-x-4">
-              <Facebook className="h-5 w-5 text-gray-400 hover:text-red-500 cursor-pointer transition-colors" />
-              <Twitter className="h-5 w-5 text-gray-400 hover:text-red-500 cursor-pointer transition-colors" />
-              <Instagram className="h-5 w-5 text-gray-400 hover:text-red-500 cursor-pointer transition-colors" />
+            <div className="flex space-x-6">
+              <Facebook className="h-5 w-5 text-white/40 hover:text-accent cursor-pointer transition-colors" />
+              <Twitter className="h-5 w-5 text-white/40 hover:text-accent cursor-pointer transition-colors" />
+              <Instagram className="h-5 w-5 text-white/40 hover:text-accent cursor-pointer transition-colors" />
             </div>
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Liên kết nhanh</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/" className="text-gray-400 hover:text-red-500 transition-colors">
-                  Trang chủ
-                </Link>
-              </li>
-              <li>
-                <Link to="/projects" className="text-gray-400 hover:text-red-500 transition-colors">
-                  Đồ án
-                </Link>
-              </li>
-              <li>
-                <Link to="/about" className="text-gray-400 hover:text-red-500 transition-colors">
-                  Giới thiệu
-                </Link>
-              </li>
-              <li>
-                <Link to="/auth" className="text-gray-400 hover:text-red-500 transition-colors">
-                  Đăng nhập
-                </Link>
-              </li>
+          <div className="space-y-8">
+            <h3 className="text-xs font-black uppercase tracking-[0.3em] text-accent">Liên kết</h3>
+            <ul className="space-y-4 text-sm font-bold">
+              <li><Link to="/" className="text-white/60 hover:text-white transition-colors">TRANG CHỦ</Link></li>
+              <li><Link to="/projects" className="text-white/60 hover:text-white transition-colors">DỰ ÁN</Link></li>
+              <li><Link to="/about" className="text-white/60 hover:text-white transition-colors">GIỚI THIỆU</Link></li>
+              <li><Link to="/auth" className="text-white/60 hover:text-white transition-colors">CỬA HÀNG</Link></li>
             </ul>
           </div>
 
-
           {/* Contact Info */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Liên hệ</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3 group cursor-pointer">
-                <Mail className="h-5 w-5 text-gray-400 group-hover:text-red-500 transition-colors" />
-                <span className="text-gray-400 text-sm group-hover:text-red-500 transition-colors">tiencode@gmail.com</span>
+          <div className="space-y-8">
+            <h3 className="text-xs font-black uppercase tracking-[0.3em] text-accent">Thông tin</h3>
+            <div className="space-y-6">
+              <div className="flex items-center space-x-4 group cursor-pointer">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                  <Mail className="h-4 w-4 text-accent" />
+                </div>
+                <span className="text-white/60 text-sm font-bold group-hover:text-white transition-colors">support@thaitienshop.vn</span>
               </div>
-              <div className="flex items-center space-x-3 group cursor-pointer">
-                <Phone className="h-5 w-5 text-gray-400 group-hover:text-red-500 transition-colors" />
-                <span className="text-gray-400 text-sm group-hover:text-red-500 transition-colors">+84 123 456 789</span>
+              <div className="flex items-center space-x-4 group cursor-pointer">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                  <Phone className="h-4 w-4 text-accent" />
+                </div>
+                <span className="text-white/60 text-sm font-bold group-hover:text-white transition-colors">+84 123 456 789</span>
               </div>
-              <div className="flex items-center space-x-3 group cursor-pointer">
-                <MapPin className="h-5 w-5 text-gray-400 group-hover:text-red-500 transition-colors" />
-                <span className="text-gray-400 text-sm group-hover:text-red-500 transition-colors">Hà Nội, Việt Nam</span>
+              <div className="flex items-center space-x-4 group cursor-pointer">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                  <Clock className="h-4 w-4 text-accent" />
+                </div>
+                <div>
+                  <p className="text-white/60 text-[10px] font-black uppercase tracking-widest mb-1">Giờ làm việc</p>
+                  <span className="text-white text-sm font-black">07:00 - 22:00</span>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Google Map */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Vị trí</h3>
-            <div className="w-full h-48 bg-gray-800 rounded-lg overflow-hidden">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.4796740123456!2d105.854167!3d21.028511!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab8c8b8c8b8c%3A0x8b8c8b8c8b8c8b8c!2sHanoi%2C%20Vietnam!5e0!3m2!1sen!2s!4v1234567890123!5m2!1sen!2s"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="TiếnCode Location"
-                className="rounded-lg"
-              ></iframe>
+          {/* Location */}
+          <div className="space-y-8">
+            <h3 className="text-xs font-black uppercase tracking-[0.3em] text-accent">Địa chỉ</h3>
+            <div className="flex items-start space-x-4">
+              <MapPin className="h-5 w-5 text-accent mt-1" />
+              <p className="text-white/60 text-sm font-bold leading-relaxed">
+                Khu đô thị công nghệ cao,<br />
+                Thành phố Hồ Chí Minh, Việt Nam
+              </p>
             </div>
-            <p className="text-gray-400 text-xs">
-              📍 Trụ sở chính tại Hà Nội, Việt Nam
-            </p>
+            <div className="pt-4">
+              <div className="inline-flex items-center space-x-2 px-4 py-2 bg-white/5 rounded-xl border border-white/10">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-white/80">Support Online</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-          <p className="text-gray-400 text-sm">
-            © 2024 TiếnCode. Tất cả quyền được bảo lưu.
-          </p>
+        <div className="border-t border-white/5 mt-20 pt-10 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
+          <p>© 2024 THAITIENSHOP ENTERPRISE. ALL RIGHTS RESERVED.</p>
+          <div className="flex space-x-8">
+            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+          </div>
         </div>
       </div>
     </footer>

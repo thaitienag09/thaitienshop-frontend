@@ -1,62 +1,62 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Star, Download, Eye, CheckCircle, Clock, ChevronLeft, Share2, ShieldCheck, Zap, MessageSquare } from 'lucide-react'
+import { Link, useParams } from 'react-router-dom'
+import { Star, Download, Eye, CheckCircle, Clock, ChevronLeft, Share2, ShieldCheck, Zap, MessageSquare, ChevronRight } from 'lucide-react'
 
 export default function ChiTietDoAn() {
+  const { id } = useParams()
   const [activeTab, setActiveTab] = useState('description')
 
   const project = {
     id: 1,
-    title: "E-Commerce Enterprise Solution",
-    description: "Hệ thống thương mại điện tử quy mô lớn với microservices architecture, tích hợp thanh toán đa phương thức và quản trị thông minh.",
-    fullDescription: `Dự án E-Commerce Enterprise Solution là một bước tiến đột phá trong việc xây dựng nền tảng bán hàng trực tuyến cho doanh nghiệp. Với kiến trúc Microservices và ứng dụng các công nghệ hiện đại nhất, giải pháp này đảm bảo tính vươn tầm, bảo mật và hiệu suất tối ưu cho mọi quy mô kinh doanh.
+    title: "Hệ thống Quản lý Cửa hàng Thú y (PetCare)",
+    description: "Giải pháp toàn diện quản lý cửa hàng thú y: quản lý hồ sơ thú cưng, lịch hẹn tiêm phòng, kho thuốc và hóa đơn thanh toán.",
+    fullDescription: `Dự án PetCare là một hệ thống quản lý chuyên sâu cho các phòng khám và cửa hàng thú y. Hệ thống giúp số hóa quy trình quản lý, từ việc tiếp nhận thú cưng đến việc theo dõi bệnh lý và quản lý kinh doanh.
 
 ## Điểm nhấn công nghệ:
-- **Kiến trúc Microservices**: Tách biệt hoàn toàn phần dịch vụ, dễ dàng mở rộng và bảo trì.
-- **Frontend Hiện đại**: Xây dựng trên React 18, Next.js 14 với Server Components tối ưu SEO.
-- **Hệ quản trị thông minh**: Admin Dashboard tích hợp phân tích dữ liệu và báo cáo real-time.
-- **Bảo mật đa tầng**: JWT, OAuth2 kết hợp với hệ thống lọc SQL Injection và XSS.
+- **Cơ sở dữ liệu MySQL**: Thiết kế chuẩn hóa giúp lưu trữ dữ liệu an toàn và truy xuất nhanh chóng.
+- **Quản lý hồ sơ**: Lưu trữ thông tin chi tiết về thú cưng, lịch sử khám bệnh và tiêm chủng.
+- **Hệ thống kho**: Tự động theo dõi tồn kho thuốc và các sản phẩm chăm sóc thú cưng.
+- **Báo cáo tài chính**: Thống kê doanh thu, chi phí và lợi nhuận theo thời gian thực.
 
 ## Danh sách tính năng:
-- **Hệ thống thanh toán**: Tích hợp VNPAY, MOMO, ZaloPay và Manual Bank Transfer.
-- **Quản lý kho vận**: Tối ưu hóa quy trình nhập xuất và theo dõi tồn kho tự động.
-- **Công cụ Marketing**: Tích hợp mã giảm giá, marketing email và tracking người dùng.
-- **Đa ngôn ngữ & Tiền tệ**: Sẵn sàng cho thị trường quốc tế với cấu hình linh hoạt.
+- **Quản lý khách hàng**: Lưu trữ thông tin chủ nuôi và liên kết với hồ sơ thú cưng.
+- **Lịch hẹn thông minh**: Hệ thống nhắc lịch tiêm phòng và tái khám tự động qua email/SMS.
+- **Quản lý bán hàng**: Tích hợp quét mã vạch và in hóa đơn chuyên nghiệp.
+- **Phân quyền người dùng**: Quản lý nhân viên với các quyền hạn khác nhau theo chức năng công việc.
 
 ## Stack Công nghệ:
-- **Phía người dùng**: React, Tailwind CSS, Framer Motion, Redux Toolkit.
-- **Hệ thống lõi**: Node.js Enterprise, Express, Socket.io cho tính năng real-time.
-- **Cơ sở dữ liệu**: MongoDB Cluster kết hợp Redis Caching cho tốc độ vượt trội.
-- **Triển khai**: Dockerize hoàn toàn, sẵn sàng cho AWS, Google Cloud hoặc Vercel.`,
-    price: "299,000",
-    originalPrice: "399,000",
-    rating: 4.8,
-    reviews: 156,
-    downloads: 1200,
-    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1000&h=600&fit=crop",
-    category: "Web Development",
+- **Ngôn ngữ**: PHP 8.2+, Laravel 10/11 Framework.
+- **Cơ sở dữ liệu**: MySQL 8.0 chuẩn hóa.
+- **Frontend**: Blade Template hoặc React (Inertia.js) phối hợp Tailwind CSS.
+- **Báo cáo**: Laravel Excel hoặc DomPDF hỗ trợ xuất hóa đơn.`,
+    price: "199,000",
+    originalPrice: "299,000",
+    rating: 5.0,
+    reviews: 45,
+    downloads: 120,
+    image: "https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=1000&h=600&fit=crop",
+    category: "Store Management",
     author: {
       name: "thaitienshop",
       avatar: "/avtar.png",
       rating: 5.0,
       projects: 50
     },
-    createdAt: "2024-01-15",
-    updatedAt: "2024-01-20",
-    tags: ["Enterprise", "Microservices", "React", "Node.js", "Scalable"],
+    createdAt: "2024-02-20",
+    updatedAt: "2024-02-23",
+    tags: ["PHP", "Laravel", "MySQL", "Pet Management"],
     requirements: [
-      "Node.js 18+ LTS",
-      "MongoDB 6.0+",
-      "Redis Server 7.0+",
-      "Cơ bản về Docker & Kubernetes"
+      "PHP >= 8.2 & Composer",
+      "MySQL Server 8.0+",
+      "Apache/Nginx (XAMPP/Laragon)",
+      "Trình duyệt hiện đại (Chrome, Edge)"
     ],
     includes: [
-      "Toàn bộ Source Code (Frontend & Backend)",
-      "Tài liệu kiến trúc Microservices chi tiết",
-      "Kịch bản deploy Docker Compose",
-      "Hỗ trợ cấu hình môi trường 1:1",
-      "Bản cập nhật tính năng định kỳ",
-      "Quyền truy cập cộng đồng Dev Enterprise"
+      "Trọn bộ Source Code Laravel Project",
+      "File Script Database MySQL chuẩn (.sql)",
+      "Tài liệu hướng dẫn cấu hình môi trường (.env)",
+      "Báo cáo đồ án chi tiết (Word/PDF)",
+      "Hỗ trợ cài đặt & fix lỗi 1:1 qua Ultraview"
     ]
   }
 
@@ -221,14 +221,21 @@ export default function ChiTietDoAn() {
                 </div>
               </div>
 
-              <div className="space-y-4 mb-10">
-                <Link to="/payment" className="w-full bg-primary text-white py-5 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center shadow-glow hover:bg-accent transition-all duration-300 transform hover:scale-[1.02]">
+              <div className="space-y-4 mb-8">
+                <Link to="/payment" className="w-full bg-[#0f172a] text-white py-5 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center shadow-glow hover:bg-accent transition-all duration-300 transform hover:scale-[1.02]">
                   SỞ HỮU NGAY
                 </Link>
                 <button className="w-full bg-white text-primary border border-gray-100 py-5 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center hover:bg-surface-muted transition-all duration-300">
                   <MessageSquare className="h-5 w-5 mr-3" />
                   TƯ VẤN 1:1
                 </button>
+              </div>
+
+              <div className="px-6 py-4 bg-accent/5 rounded-2xl border border-accent/10 mb-10">
+                <p className="text-[10px] font-bold text-accent uppercase tracking-widest mb-1 text-center">Lưu ý thanh toán</p>
+                <p className="text-xs text-gray-500 text-center leading-relaxed">
+                  Vui lòng chuyển khoản kèm theo <span className="text-primary font-bold">địa chỉ Gmail</span> của bạn để nhận source code tự động.
+                </p>
               </div>
 
               <div className="space-y-4 pt-10 border-t border-gray-100">

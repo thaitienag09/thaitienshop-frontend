@@ -48,11 +48,11 @@ export default function Trangchu() {
               <span>Đẳng cấp doanh nghiệp</span>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold text-primary mb-8 leading-[1.1]">
-              Kiến tạo tương lai với <span className="text-gradient">Giải pháp Đồ án</span> chuyên nghiệp
+              Kiến tạo tương lai với <span className="text-gradient">Giải pháp Quản lý</span> Thú y chuyên nghiệp
             </h1>
             <p className="text-xl text-gray-500 mb-12 leading-relaxed">
-              thaitienshop cung cấp hệ sinh thái đồ án công nghệ thông tin cao cấp,
-              được tối ưu hóa cho doanh nghiệp và sinh viên xuất sắc.
+              thaitienshop cung cấp hệ thống quản lý cửa hàng thú y (PetCare) cao cấp,
+              sử dụng Laravel & MySQL, giúp tối ưu hóa vận hành và chăm sóc thú cưng toàn diện.
             </p>
             <div className="flex flex-col sm:flex-row gap-5 justify-center">
               <Link

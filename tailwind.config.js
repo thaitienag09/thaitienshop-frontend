@@ -7,8 +7,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        tomato: '#FF6347',
-        orange: '#FF8C00',
+        primary: 'var(--primary)',
+        'primary-light': 'var(--primary-light)',
+        accent: 'var(--accent)',
+        surface: 'var(--surface)',
+        'surface-muted': 'var(--surface-muted)',
       },
       fontFamily: {
         'sans': ['Inter', 'system-ui', 'sans-serif'],

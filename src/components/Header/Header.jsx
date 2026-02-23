@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Search, ChevronRight } from 'lucide-react'
+import { Menu, X, Search, ChevronRight, Clock, Phone } from 'lucide-react'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -23,10 +23,29 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'glass py-3 shadow-premium' : 'bg-transparent py-5'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'glass shadow-premium' : 'bg-transparent'
         }`}
     >
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+      {/* Top Bar */}
+      <div className={`bg-primary transition-all duration-300 ${isScrolled ? 'h-0 opacity-0 overflow-hidden' : 'h-10 opacity-100'}`}>
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 h-full flex justify-between items-center text-white/80 text-[10px] sm:text-xs font-bold uppercase tracking-widest">
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center">
+              <Clock className="h-3.5 w-3.5 mr-2 text-accent" />
+              <span>Giờ mở cửa: 07:00 - 22:00</span>
+            </div>
+            <div className="flex items-center hidden sm:flex">
+              <Phone className="h-3.5 w-3.5 mr-2 text-accent" />
+              <span>Hỗ trợ: +84 123 456 789</span>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <span className="hidden md:block">Chất lượng hàng đầu cho chuyên gia</span>
+          </div>
+        </div>
+      </div>
+
+      <div className={`max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 transition-all duration-300 ${isScrolled ? 'py-3' : 'py-5'}`}>
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">

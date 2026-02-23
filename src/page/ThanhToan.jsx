@@ -7,10 +7,11 @@ export default function ThanhToan() {
   const [isSuccess, setIsSuccess] = useState(false)
 
   const project = {
-    title: "E-Commerce Enterprise Solution",
-    price: "299,000",
-    originalPrice: "399,000",
-    discount: 25
+    title: "Hệ thống Quản lý Cửa hàng Thú y (PetCare)",
+    price: "199,000",
+    originalPrice: "299,000",
+    discount: 33,
+    image: "https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=200&h=200&fit=crop"
   }
 
   const handlePayment = () => {
@@ -28,16 +29,16 @@ export default function ThanhToan() {
           <div className="w-24 h-24 bg-green-50 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-sm">
             <CheckCircle className="h-12 w-12 text-green-500" />
           </div>
-          <h1 className="text-3xl font-black text-primary mb-6 uppercase tracking-tight">Yêu cầu đã được gửi!</h1>
+          <h1 className="text-3xl font-black text-primary mb-6 uppercase tracking-tight">Gửi xác nhận thành công!</h1>
           <p className="text-gray-500 mb-10 leading-relaxed font-medium">
-            Hệ thống đã ghi nhận thông tin giao dịch của bạn. Đội ngũ kỹ thuật
-            <span className="text-primary font-bold px-1">thaitienshop</span>
-            sẽ xác thực và kích hoạt quyền truy cập mã nguồn trong vòng 15-30 phút.
+            Nếu bạn đã chuyển khoản kèm <span className="text-primary font-bold">Gmail</span> đúng nội dung,
+            source code sẽ được gửi tự động trong 5-10 phút.
+            Cảm ơn bạn đã tin tưởng thaitienshop!
           </p>
           <div className="space-y-4">
             <Link
               to="/projects"
-              className="block w-full bg-primary text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-premium hover:bg-accent transition-all duration-300"
+              className="block w-full bg-[#0f172a] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-premium hover:bg-accent transition-all duration-300"
             >
               TIẾP TỤC KHÁM PHÁ
             </Link>
@@ -108,9 +109,14 @@ export default function ThanhToan() {
                     <p className="text-3xl font-black text-accent">{project.price}₫</p>
                   </div>
 
-                  <div className="bg-white/50 backdrop-blur-sm p-4 rounded-xl border border-white">
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Nội dung chuyển khoản</p>
-                    <p className="text-xs font-bold text-primary italic">"THANH TOAN {project.title.toUpperCase()}"</p>
+                  <div className="bg-white/50 backdrop-blur-sm p-6 rounded-xl border border-white">
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Nội dung chuyển khoản (BẮT BUỘC)</p>
+                    <div className="p-4 bg-primary text-white rounded-xl mb-4">
+                      <p className="text-sm font-bold italic text-center">"PETCARE - [GMAIL_CUA_BAN]"</p>
+                    </div>
+                    <p className="text-[10px] text-gray-400 leading-relaxed text-center">
+                      Thay <span className="italic text-primary font-bold">[GMAIL_CUA_BAN]</span> bằng địa chỉ Gmail của bạn để hệ thống gửi code tự động.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -118,16 +124,19 @@ export default function ThanhToan() {
               <div className="mt-10 space-y-6">
                 <div className="flex items-start bg-blue-50/50 p-6 rounded-2xl border border-blue-100">
                   <Info className="h-5 w-5 text-accent mr-4 flex-shrink-0 mt-0.5" />
-                  <p className="text-xs font-semibold text-gray-500 leading-relaxed">
-                    Vui lòng chuyển đúng số tiền và nội dung để hệ thống tự động nhận diện.
-                    Sau khi chuyển khoản, hãy nhấn nút xác nhận bên dưới.
-                  </p>
+                  <div>
+                    <p className="text-xs font-bold text-primary mb-1 uppercase">Lưu ý quan trọng</p>
+                    <p className="text-xs font-semibold text-gray-500 leading-relaxed">
+                      Chuyển đúng số tiền và kèm Gmail trong nội dung để nhận code ngay.
+                      Hệ thống sẽ từ chối các giao dịch thiếu Gmail.
+                    </p>
+                  </div>
                 </div>
 
                 <button
                   onClick={handlePayment}
                   disabled={isProcessing}
-                  className="w-full bg-primary text-white py-6 rounded-2xl font-black text-sm uppercase tracking-widest shadow-premium hover:bg-accent transition-all duration-300 flex items-center justify-center disabled:opacity-50"
+                  className="w-full bg-[#0f172a] text-white py-6 rounded-2xl font-black text-sm uppercase tracking-widest shadow-glow hover:bg-accent transition-all duration-300 flex items-center justify-center disabled:opacity-50"
                 >
                   {isProcessing ? (
                     <div className="flex items-center">
