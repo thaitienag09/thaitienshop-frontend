@@ -12,7 +12,7 @@ const firebaseConfig = {
     messagingSenderId: "545068453271",
     appId: "1:545068453271:web:5a5d70bb4afb0d2e47c8d2",
     measurementId: "G-FP65FV0KS1",
-    databaseURL: "https://shopdoanthaitien-default-rtdb.asia-southeast1.firebasedatabase.app/"
+    databaseURL: "https://shopdoanthaitien-default-rtdb.asia-southeast1.firebasedatabase.app" // Đã bỏ dấu gạch chéo cuối
 };
 
 const app = initializeApp(firebaseConfig);
@@ -31,18 +31,23 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
     // Lắng nghe sự thay đổi từ Firebase khi ở bước Verifying
     useEffect(() => {
         if (paymentStep === 3 && transactionId) {
-            console.log("🔥 Đang lắng nghe Firebase:", `transactions/${transactionId}/status`);
+            const txPath = `transactions/${transactionId}/status`;
+            const statusRef = ref(db, txPath);
+
+            console.log("🔥 Lắng nghe tại:", txPath);
             const unsubscribe = onValue(statusRef, (snapshot) => {
                 const status = snapshot.val();
-                console.log("📡 Trạng thái cập nhật từ Firebase:", status);
+                console.log("📡 Nhận dữ liệu từ Firebase:", status);
                 if (status === 'success') {
                     setPaymentStep(4);
                 } else if (status === 'failed') {
                     setPaymentStep(5);
                 }
+            }, (error) => {
+                console.error("❌ Lỗi lắng nghe Firebase:", error);
             });
 
-            return () => off(statusRef);
+            return () => unsubscribe();
         }
     }, [paymentStep, transactionId]);
 
@@ -234,12 +239,20 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
                         <p className="text-gray-500 max-w-sm leading-relaxed mb-8 font-medium">
                             Hệ thống sẽ tự động cập nhật ngay khi Admin nhấn nút xác nhận trên Telegram.
                         </p>
-                        <div className="p-4 bg-gray-50 rounded-2xl flex flex-col items-center space-y-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                        <div className="p-4 bg-gray-50 rounded-2xl flex flex-col items-center space-y-3 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                             <div className="flex items-center space-x-3">
                                 <div className="h-2 w-2 bg-yellow-400 rounded-full animate-ping"></div>
-                                <span>Bạn vui lòng không tắt màn hình này</span>
+                                <span>Đang đợi Admin nhấn nút...</span>
                             </div>
-                            <span className="opacity-50">Mã GD: {transactionId}</span>
+                            <div className="flex flex-col items-center space-y-1">
+                                <span className="opacity-50">Mã GD: {transactionId}</span>
+                                <button
+                                    onClick={() => window.location.reload()}
+                                    className="text-accent hover:underline mt-2"
+                                >
+                                    Nếu Admin đã bấm mà chưa thấy gì, nhấn vào đây để tải lại trang
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )}
