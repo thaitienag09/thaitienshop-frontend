@@ -8,7 +8,7 @@ const firebaseConfig = {
     storageBucket: "shopdoanthaitien.firebasestorage.app",
     messagingSenderId: "545068453271",
     appId: "1:545068453271:web:5a5d70bb4afb0d2e47c8d2",
-    databaseURL: "https://shopdoanthaitien-default-rtdb.firebaseio.com/"
+    databaseURL: "https://shopdoanthaitien-default-rtdb.asia-southeast1.firebasedatabase.app/"
 };
 
 const app = initializeApp(firebaseConfig);
