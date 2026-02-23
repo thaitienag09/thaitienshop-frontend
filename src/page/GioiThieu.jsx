@@ -5,21 +5,18 @@ import {
   Award,
   Users,
   Clock,
-  CheckCircle,
   Star,
   ArrowRight,
-  Heart,
-  Lightbulb,
-  Target,
-  Zap,
-  Shield,
   Globe,
   Smartphone,
   Cpu,
-  Gamepad2,
-  GraduationCap,
-  Rocket,
-  Brain
+  Brain,
+  ShieldCheck,
+  Zap,
+  Target,
+  ExternalLink,
+  CheckCircle,
+  Terminal
 } from 'lucide-react'
 
 export default function GioiThieu() {
@@ -29,201 +26,119 @@ export default function GioiThieu() {
     setIsVisible(true)
   }, [])
 
-  const skills = [
-    { name: 'JavaScript', icon: 'fab fa-js-square', color: 'text-yellow-400' },
-    { name: 'React', icon: 'fab fa-react', color: 'text-blue-400' },
-    { name: 'Node.js', icon: 'fab fa-node-js', color: 'text-green-600' },
-    { name: 'Python', icon: 'fab fa-python', color: 'text-blue-600' },
-    { name: 'HTML5', icon: 'fab fa-html5', color: 'text-orange-500' },
-    { name: 'Laravel', icon: 'fab fa-laravel', color: 'text-red-500' },
-    { name: 'Git', icon: 'fab fa-git-alt', color: 'text-orange-600' },
-    { name: 'MongoDB', icon: 'fas fa-database', color: 'text-green-500' }
-  ]
-
   const achievements = [
     {
-      icon: Award,
-      title: '500+ Đồ án hoàn thành',
-      description: 'Đã tạo ra hơn 500 đồ án chất lượng cao cho sinh viên',
-      color: 'text-yellow-500'
+      icon: Code,
+      value: '500+',
+      label: 'DỰ ÁN HOÀN THÀNH',
+      description: 'Hệ thống phần mềm và website chất lượng cao.'
     },
     {
       icon: Users,
-      title: '1000+ Sinh viên hài lòng',
-      description: 'Nhận được phản hồi tích cực từ hàng nghìn sinh viên',
-      color: 'text-blue-500'
+      value: '1000+',
+      label: 'NGƯỜI DÙNG TIN TƯỞNG',
+      description: 'Đối tác và sinh viên trên toàn quốc.'
     },
     {
-      icon: Star,
-      title: '4.9/5 Đánh giá trung bình',
-      description: 'Luôn duy trì chất lượng dịch vụ ở mức cao nhất',
-      color: 'text-purple-500'
+      icon: Award,
+      value: '5+',
+      label: 'NĂM KINH NGHIỆM',
+      description: 'Chuyên sâu trong phát triển giải pháp Enterprise.'
     },
     {
-      icon: Clock,
-      title: '5+ Năm kinh nghiệm',
-      description: 'Kinh nghiệm dày dặn trong lĩnh vực phát triển phần mềm',
-      color: 'text-green-500'
+      icon: Zap,
+      value: '4.9/5',
+      label: 'CHỈ SỐ HÀI LÒNG',
+      description: 'Cam kết chất lượng và hỗ trợ kỹ thuật tận tâm.'
     }
   ]
 
-  const services = [
+  const coreValues = [
     {
-      icon: Globe,
-      title: 'Web Development',
-      description: 'Website responsive, SPA, E-commerce với React, Vue, Angular',
-      features: ['React.js', 'Next.js', 'Tailwind CSS', 'API Integration']
+      icon: Target,
+      title: 'Tầm nhìn',
+      description: 'Trở thành đơn vị cung cấp giải pháp chuyển đổi số hàng đầu cho lĩnh vực kinh doanh thú y và quản lý cửa hàng.'
     },
     {
-      icon: Smartphone,
-      title: 'Mobile App Development',
-      description: 'Ứng dụng di động cross-platform với React Native, Flutter',
-      features: ['React Native', 'Flutter', 'iOS/Android', 'Push Notifications']
+      icon: ShieldCheck,
+      title: 'Sứ mệnh',
+      description: 'Mang đến những bộ mã nguồn đạt chuẩn công nghiệp, bảo mật cao và dễ dàng mở rộng cho mọi doanh nghiệp.'
     },
     {
-      icon: Cpu,
-      title: 'AI/ML Projects',
-      description: 'Dự án trí tuệ nhân tạo và machine learning với Python',
-      features: ['Python', 'TensorFlow', 'PyTorch', 'Data Analysis']
-    },
-    {
-      icon: Gamepad2,
-      title: 'Game Development',
-      description: 'Game 2D/3D với Unity, Unreal Engine và web games',
-      features: ['Unity', 'C#', 'JavaScript', 'WebGL']
-    }
-  ]
-
-  const timeline = [
-    {
-      year: '2021',
-      title: 'Bắt đầu sự nghiệp',
-      description: 'Tốt nghiệp đại học và bắt đầu làm việc với các dự án CNTT',
-      icon: GraduationCap,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-100'
-    },
-    {
-      year: '2022',
-      title: 'Chuyên sâu Web Development',
-      description: 'Tập trung phát triển kỹ năng React.js và Node.js',
-      icon: Code,
-      color: 'text-green-600',
-      bgColor: 'bg-green-100'
-    },
-    {
-      year: '2023',
-      title: 'Mở rộng sang Mobile',
-      description: 'Học React Native và bắt đầu phát triển ứng dụng di động',
-      icon: Smartphone,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-100'
-    },
-    {
-      year: '2024',
-      title: 'Tham gia AI/ML',
-      description: 'Khám phá lĩnh vực trí tuệ nhân tạo và machine learning',
       icon: Brain,
-      color: 'text-orange-600',
-      bgColor: 'bg-orange-100'
-    },
-    {
-      year: '2025',
-      title: 'TiếnCode Platform',
-      description: 'Ra mắt nền tảng TiếnCode để phục vụ sinh viên',
-      icon: Rocket,
-      color: 'text-red-600',
-      bgColor: 'bg-red-100'
+      title: 'Giá trị cốt lõi',
+      description: 'Sáng tạo không ngừng, lấy trải nghiệm người dùng làm trung tâm và luôn tuân thủ các tiêu chuẩn lập trình quốc tế.'
     }
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className="w-32 h-32 bg-white p-1 rounded-full mx-auto mb-8 shadow-premium overflow-hidden">
-              <img src="/avtar.png" alt="Dương Thái Tiến" className="w-full h-full object-cover rounded-full" />
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Xin chào, tôi là Thái Tiến
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto">
-              Full Stack Developer với hơn 5 năm kinh nghiệm trong lĩnh vực CNTT.
-              Tôi chuyên tạo ra các đồ án chất lượng cao cho sinh viên.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/projects"
-                className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors flex items-center justify-center"
-              >
-                Xem đồ án của tôi
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link
-                to="/#contact"
-                className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-blue-600 transition-colors"
-              >
-                Liên hệ ngay
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div className="min-h-screen bg-[#fafafa]">
+      {/* Hero Section - Dark & Professional */}
+      <section className="relative pt-32 pb-20 bg-[#0f172a] overflow-hidden">
+        {/* Abstract background elements */}
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-accent/5 skew-x-12 translate-x-1/4 pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/20 rounded-full blur-[120px] pointer-events-none"></div>
 
-      {/* About Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className={`transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                Về tôi
-              </h2>
-              <p className="text-lg text-gray-600 mb-6">
-                Tôi là một developer đam mê công nghệ với hơn 5 năm kinh nghiệm trong lĩnh vực CNTT.
-                Tôi bắt đầu sự nghiệp với việc phát triển web và dần mở rộng sang các lĩnh vực khác
-                như mobile app, AI/ML và game development.
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className={`space-y-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+              <div className="inline-flex items-center space-x-3 px-4 py-2 bg-white/5 rounded-full border border-white/10">
+                <div className="w-2 h-2 bg-accent rounded-full"></div>
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/70">Expert Developer Profile</span>
+              </div>
+
+              <h1 className="text-5xl sm:text-7xl font-black text-white tracking-tighter leading-none">
+                GIỚI THIỆU <br />
+                <span className="text-accent underline decoration-white/10 underline-offset-8 transition-colors duration-500 hover:text-white">
+                  THAITIENSHOP
+                </span>
+              </h1>
+
+              <p className="text-lg text-white/50 max-w-xl font-medium leading-relaxed italic">
+                Cung cấp hệ sinh thái giải pháp lập trình chất lượng cao, chuyên sâu vào hệ thống quản lý doanh nghiệp (ERP) và thương mại điện tử.
               </p>
-              <p className="text-lg text-gray-600 mb-8">
-                Với mong muốn giúp đỡ các bạn sinh viên có được những đồ án chất lượng cao,
-                tôi đã tạo ra thaitienshop - nền tảng cung cấp đồ án CNTT tốt nhất cho sinh viên.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center bg-blue-50 px-4 py-2 rounded-lg">
-                  <Heart className="h-5 w-5 text-red-500 mr-2" />
-                  <span className="text-blue-800 font-medium">Đam mê công nghệ</span>
-                </div>
-                <div className="flex items-center bg-green-50 px-4 py-2 rounded-lg">
-                  <Lightbulb className="h-5 w-5 text-yellow-500 mr-2" />
-                  <span className="text-green-800 font-medium">Sáng tạo</span>
-                </div>
-                <div className="flex items-center bg-purple-50 px-4 py-2 rounded-lg">
-                  <Target className="h-5 w-5 text-purple-500 mr-2" />
-                  <span className="text-purple-800 font-medium">Tập trung chất lượng</span>
-                </div>
+
+              <div className="flex items-center space-x-6">
+                <Link
+                  to="/projects"
+                  className="bg-white text-primary px-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-premium hover:shadow-glow hover:-translate-y-1 transition-all duration-500"
+                >
+                  XEM THƯ VIỆN DỰ ÁN
+                </Link>
+                <a
+                  href="#contact"
+                  className="text-white/70 hover:text-white font-black text-xs uppercase tracking-widest flex items-center transition-colors"
+                >
+                  LIÊN HỆ TƯ VẤN <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
               </div>
             </div>
-            <div className={`transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
-                <div className="text-center">
-                  <h3 className="text-2xl font-bold mb-4">Thống kê của tôi</h3>
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="text-center">
-                      <div className="text-3xl font-bold mb-2">500+</div>
-                      <div className="text-sm text-blue-100">Đồ án hoàn thành</div>
+
+            <div className={`relative transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+              <div className="relative group">
+                <div className="absolute -inset-4 bg-accent/10 rounded-[3rem] blur-3xl group-hover:bg-accent/20 transition-all duration-700"></div>
+                <div className="relative glass p-10 rounded-[3rem] border border-white/20 aspect-square flex items-center justify-center overflow-hidden shadow-glow">
+                  {/* Abstract Tech Branding */}
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-transparent rounded-full animate-pulse"></div>
+                    <div className="relative z-10 flex flex-col items-center">
+                      <div className="w-24 h-24 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl flex items-center justify-center mb-6 shadow-2xl transform group-hover:rotate-12 transition-transform duration-700">
+                        <Terminal className="h-12 w-12 text-accent" />
+                      </div>
+                      <div className="text-center space-y-2">
+                        <div className="h-1.5 w-32 bg-white/20 rounded-full mx-auto overflow-hidden">
+                          <div className="h-full bg-accent w-2/3 animate-shimmer"></div>
+                        </div>
+                        <div className="h-1.5 w-24 bg-white/10 rounded-full mx-auto"></div>
+                      </div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-3xl font-bold mb-2">1000+</div>
-                      <div className="text-sm text-blue-100">Sinh viên hài lòng</div>
+
+                    {/* Floating elements */}
+                    <div className="absolute top-0 right-0 w-12 h-12 glass rounded-xl flex items-center justify-center animate-bounce-slow">
+                      <Code className="h-6 w-6 text-white/30" />
                     </div>
-                    <div className="text-center">
-                      <div className="text-3xl font-bold mb-2">5+</div>
-                      <div className="text-sm text-blue-100">Năm kinh nghiệm</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-3xl font-bold mb-2">4.9/5</div>
-                      <div className="text-sm text-blue-100">Đánh giá trung bình</div>
+                    <div className="absolute bottom-10 left-0 w-10 h-10 glass rounded-xl flex items-center justify-center animate-pulse">
+                      <Cpu className="h-5 w-5 text-white/20" />
                     </div>
                   </div>
                 </div>
@@ -233,259 +148,142 @@ export default function GioiThieu() {
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Kỹ năng của tôi
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Các công nghệ và ngôn ngữ lập trình tôi thành thạo
-            </p>
-          </div>
-
-          {/* Marquee Container */}
-          <div className="relative overflow-hidden marquee-container">
-            <div className="flex animate-marquee">
-              {/* First set of skills */}
-              {skills.map((skill, index) => (
-                <div
-                  key={`first-${index}`}
-                  className="flex-shrink-0 mx-8 bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-4 min-w-[200px]"
-                >
-                  <i className={`${skill.icon} text-3xl ${skill.color} icon-hover`}></i>
-                  <span className="text-lg font-semibold text-gray-900">{skill.name}</span>
-                </div>
-              ))}
-              {/* Duplicate for seamless loop */}
-              {skills.map((skill, index) => (
-                <div
-                  key={`second-${index}`}
-                  className="flex-shrink-0 mx-8 bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-4 min-w-[200px]"
-                >
-                  <i className={`${skill.icon} text-3xl ${skill.color} icon-hover`}></i>
-                  <span className="text-lg font-semibold text-gray-900">{skill.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Achievements Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Thành tích nổi bật
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Những con số ấn tượng trong sự nghiệp của tôi
-            </p>
-          </div>
-
+      {/* Stats Section - Clean & Geometric */}
+      <section className="py-24">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {achievements.map((achievement, index) => (
-              <div
-                key={achievement.title}
-                className={`text-center p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 delay-${index * 100} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-              >
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${achievement.color.replace('text-', 'bg-').replace('-500', '-100')}`}>
-                  <achievement.icon className={`h-8 w-8 ${achievement.color}`} />
+            {achievements.map((item, idx) => (
+              <div key={idx} className="bg-white p-10 rounded-[3rem] shadow-premium border border-gray-100 hover:-translate-y-2 transition-all duration-500 group">
+                <div className="w-14 h-14 bg-accent/5 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-white transition-all duration-500">
+                  <item.icon className="h-6 w-6 text-accent group-hover:text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{achievement.title}</h3>
-                <p className="text-gray-600">{achievement.description}</p>
+                <p className="text-4xl font-black text-primary tracking-tighter mb-2">{item.value}</p>
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">{item.label}</p>
+                <p className="text-xs text-gray-500 font-medium leading-relaxed">{item.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-
-      {/* Timeline Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Hành trình của tôi
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Những cột mốc quan trọng trong sự nghiệp phát triển của tôi
-            </p>
+      {/* Philosophy Section */}
+      <section className="bg-white py-32 border-y border-gray-100">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="max-w-3xl mb-20">
+            <h2 className="text-xs font-black text-accent uppercase tracking-[0.4em] mb-4">TRIẾT LÝ PHÁT TRIỂN</h2>
+            <h3 className="text-4xl sm:text-5xl font-black text-primary tracking-tighter leading-tight">
+              TIÊU CHUẨN CÔNG NGHIỆP <br />
+              <span className="text-gray-300">TRONG TỪNG DÒNG CODE.</span>
+            </h3>
           </div>
 
-          <div className="relative">
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-600 to-purple-600"></div>
-            {timeline.map((item, index) => (
-              <div
-                key={item.year}
-                className={`relative flex items-center mb-12 ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}
-              >
-                <div className={`w-1/2 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
-                  <div className={`bg-white rounded-xl p-6 shadow-lg transition-all duration-500 delay-${index * 100} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                    <div className="flex items-center mb-4">
-                      <div className={`w-12 h-12 ${item.bgColor} rounded-lg flex items-center justify-center mr-4`}>
-                        <item.icon className={`h-6 w-6 ${item.color}`} />
-                      </div>
-                      <div>
-                        <div className={`${item.color} font-bold text-lg`}>{item.year}</div>
-                        <h3 className="text-xl font-semibold text-gray-900">{item.title}</h3>
-                      </div>
-                    </div>
-                    <p className="text-gray-600">{item.description}</p>
-                  </div>
-                </div>
-                <div className={`absolute left-1/2 transform -translate-x-1/2 w-4 h-4 ${item.color.replace('text-', 'bg-')} rounded-full border-4 border-white shadow-lg`}></div>
-                <div className="w-1/2"></div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
+            {coreValues.map((value, idx) => (
+              <div key={idx} className="space-y-6">
+                <div className="text-primary/20 font-black text-5xl">0{idx + 1}</div>
+                <h4 className="text-xl font-bold text-primary">{value.title}</h4>
+                <p className="text-gray-500 text-sm font-medium leading-relaxed italic">
+                  "{value.description}"
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className={`transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Sẵn sàng bắt đầu dự án của bạn?
-            </h2>
-            <p className="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
-              Hãy liên hệ với tôi ngay để được tư vấn miễn phí về đồ án CNTT của bạn
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/#contact"
-                className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors flex items-center justify-center"
-              >
-                Liên hệ ngay
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link
-                to="/projects"
-                className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-blue-600 transition-colors"
-              >
-                Xem đồ án của tôi
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Donate Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Ủng hộ tôi
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Nếu bạn thấy các đồ án của tôi hữu ích, hãy ủng hộ để tôi có thể tiếp tục tạo ra nhiều sản phẩm chất lượng hơn
-            </p>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-            <div className="text-center mb-8">
-              <div className="w-20 h-20 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i className="fas fa-heart text-3xl text-white"></i>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Cảm ơn bạn đã ủng hộ!</h3>
-              <p className="text-gray-600 mb-6">
-                Mỗi khoản ủng hộ của bạn sẽ giúp tôi duy trì và phát triển thêm nhiều đồ án chất lượng cao
+      {/* Skills & Stack - Minimalist Monochrome */}
+      <section className="py-32">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+            <div className="space-y-8">
+              <h2 className="text-4xl font-black text-primary tracking-tighter uppercase">KỸ NĂNG CHUYÊN MÔN</h2>
+              <p className="text-gray-500 text-sm leading-relaxed max-w-lg">
+                Chúng tôi sử dụng những bộ công cụ hiện đại và ổn định nhất để xây dựng hệ thống.
+                Đặc biệt tối ưu hóa cho môi trường Laravel và giải pháp cơ sở dữ liệu MySQL.
               </p>
+              <div className="grid grid-cols-2 gap-4">
+                {['Laravel 10+', 'React / Next.js', 'MySQL Professional', 'RESTful API', 'AWS / DigitalOcean', 'System Architecture'].map((skill, i) => (
+                  <div key={i} className="flex items-center space-x-3 text-sm font-bold text-primary">
+                    <CheckCircle className="h-4 w-4 text-accent" />
+                    <span>{skill}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Donate Amounts */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
               {[
-                { amount: '50,000', label: 'Cà phê' },
-                { amount: '100,000', label: 'Bữa ăn' },
-                { amount: '200,000', label: 'Sách' },
-                { amount: '500,000', label: 'Khóa học' }
-              ].map((item, index) => (
-                <button
-                  key={index}
-                  className={`p-4 rounded-xl border-2 transition-all duration-200 hover:scale-105 ${index === 1
-                      ? 'border-red-500 bg-red-50 text-red-600'
-                      : 'border-gray-200 hover:border-red-300 text-gray-700'
-                    }`}
-                >
-                  <div className="text-lg font-bold">{item.amount}₫</div>
-                  <div className="text-sm">{item.label}</div>
-                </button>
+                { name: 'Laravel', level: 'Expert' },
+                { name: 'React', level: 'Advanced' },
+                { name: 'MySQL', level: 'Expert' },
+                { name: 'Node.js', level: 'Senior' },
+                { name: 'Python', level: 'Senior' },
+                { name: 'Unity', level: 'Mid' }
+              ].map((s, i) => (
+                <div key={i} className="bg-white border border-gray-100 p-6 rounded-3xl text-center shadow-sm hover:border-accent/40 transition-colors">
+                  <p className="text-lg font-black text-primary tracking-tighter">{s.name}</p>
+                  <p className="text-[10px] font-black text-accent uppercase tracking-widest">{s.level}</p>
+                </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Custom Amount */}
-            <div className="mb-8">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Số tiền tùy chỉnh
-              </label>
-              <div className="relative">
-                <input
-                  type="number"
-                  placeholder="Nhập số tiền..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-lg"
-                />
-                <span className="absolute right-4 top-3 text-gray-500">₫</span>
-              </div>
-            </div>
-
-            {/* Payment Methods */}
-            <div className="mb-8">
-              <h4 className="text-lg font-semibold text-gray-900 mb-4">Phương thức thanh toán</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button className="flex items-center justify-center p-4 border border-gray-300 rounded-lg hover:border-red-500 hover:bg-red-50 transition-colors">
-                  <i className="fas fa-university text-2xl text-blue-600 mr-3"></i>
-                  <div className="text-left">
-                    <div className="font-medium">Chuyển khoản ngân hàng</div>
-                    <div className="text-sm text-gray-500">Vietcombank, BIDV, Techcombank</div>
-                  </div>
-                </button>
-                <button className="flex items-center justify-center p-4 border border-gray-300 rounded-lg hover:border-red-500 hover:bg-red-50 transition-colors">
-                  <i className="fas fa-mobile-alt text-2xl text-green-600 mr-3"></i>
-                  <div className="text-left">
-                    <div className="font-medium">Ví điện tử</div>
-                    <div className="text-sm text-gray-500">Momo, ZaloPay, VNPay</div>
-                  </div>
-                </button>
-              </div>
-            </div>
-
-            {/* Donate Button */}
-            <div className="text-center">
-              <button className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-red-600 hover:to-pink-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
-                <i className="fas fa-heart mr-2"></i>
-                Ủng hộ ngay
-              </button>
-              <p className="text-sm text-gray-500 mt-4">
-                💝 Mọi khoản ủng hộ đều được ghi nhận và cảm ơn chân thành
+      {/* CTA - Professional Grade */}
+      <section className="py-24 px-6 sm:px-8 lg:px-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-[#0f172a] rounded-[4rem] p-12 sm:p-20 relative overflow-hidden text-center shadow-glow">
+            <div className="absolute top-0 left-0 w-full h-full bg-accent/5 pointer-events-none"></div>
+            <div className="relative z-10 space-y-10">
+              <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tighter leading-none">
+                SẴN SÀNG CHO <br />
+                <span className="text-accent">DỰ ÁN TIẾP THEO?</span>
+              </h2>
+              <p className="text-white/40 text-sm max-w-xl mx-auto font-medium leading-relaxed italic">
+                Hỗ trợ tư vấn giải pháp từ A-Z. Đảm bảo bàn giao mã nguồn sạch, tài liệu đầy đủ và bảo mật tuyệt đối.
               </p>
-            </div>
-
-            {/* Bank Info */}
-            <div className="mt-8 p-6 bg-gray-50 rounded-xl">
-              <h4 className="text-lg font-semibold text-gray-900 mb-4">Thông tin chuyển khoản</h4>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Ngân hàng:</span>
-                  <span className="font-medium">VIB (Ngân hàng Quốc tế)</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Số tài khoản:</span>
-                  <span className="font-medium font-mono text-lg">913263053</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Chủ tài khoản:</span>
-                  <span className="font-medium">DUONG THAI TIEN</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Nội dung:</span>
-                  <span className="font-medium text-red-600">UNG HO THAITIENSHOP</span>
-                </div>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
+                <Link
+                  to="/projects"
+                  className="w-full sm:w-auto px-12 py-5 bg-white text-primary rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-accent hover:text-white transition-all duration-500 shadow-premium"
+                >
+                  XEM SẢN PHẨM
+                </Link>
+                <button className="w-full sm:w-auto px-12 py-5 bg-white/5 border border-white/10 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white/10 transition-colors">
+                  LIÊN HỆ TRỰC TIẾP
+                </button>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Support Section - Understated */}
+      <section className="py-20 bg-[#fafafa]">
+        <div className="max-w-4xl mx-auto px-8 text-center space-y-8">
+          <div className="inline-flex items-center px-4 py-1.5 bg-gray-100 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-400">
+            Support the Developer
+          </div>
+          <h4 className="text-xl font-bold text-primary uppercase tracking-widest">Ủng hộ thaitienshop</h4>
+          <p className="text-gray-500 text-xs italic max-w-lg mx-auto leading-relaxed">
+            Nếu bạn thấy những giải pháp của chúng tôi hữu ích, mọi sự đóng góp sẽ được sử dụng để phát triển thêm nhiều dự án Open Source chất lượng.
+          </p>
+          <div className="bg-white border border-gray-100 rounded-3xl p-8 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex items-center space-x-6">
+              <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center">
+                <Smartphone className="h-8 w-8 text-white" />
+              </div>
+              <div className="text-left">
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Số tài khoản VIB</p>
+                <p className="text-xl font-black text-primary tracking-tighter">913 263 053</p>
+                <p className="text-xs font-bold text-accent uppercase tracking-widest mt-1">DUONG THAI TIEN</p>
+              </div>
+            </div>
+            <button className="flex items-center space-x-2 bg-primary text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-premium hover:shadow-glow transition-all">
+              <span>SAO CHÉP STK</span>
+              <ExternalLink className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </section>
