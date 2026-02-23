@@ -44,7 +44,8 @@ export default async function handler(req, res) {
                     ? `✅ GIAO DỊCH ĐÃ ĐƯỢC XÁC NHẬN\n\nMã: ${transactionId}\nKhách đã nhận được thông báo thành công trên Web.`
                     : `❌ GIAO DỊCH ĐÃ BỊ HỦY\n\nMã: ${transactionId}`;
 
-                await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/editMessageText`, {
+                const botToken = '8716710838:AAFBO26c5u-yvR4wkoSSRmNYertmyl5LNmc';
+                await fetch(`https://api.telegram.org/bot${botToken}/editMessageText`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
