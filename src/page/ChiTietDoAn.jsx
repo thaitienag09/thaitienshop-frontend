@@ -222,19 +222,22 @@ export default function ChiTietDoAn() {
               </div>
 
               <div className="space-y-4 mb-8">
-                <Link to="/payment" className="w-full bg-[#0f172a] text-white py-5 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center shadow-glow hover:bg-accent transition-all duration-300 transform hover:scale-[1.02]">
-                  SỞ HỮU NGAY
-                </Link>
+                <button disabled className="w-full bg-gray-200 text-gray-400 py-5 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center cursor-not-allowed">
+                  CHƯA SẴN DÙNG
+                </button>
                 <button className="w-full bg-white text-primary border border-gray-100 py-5 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center hover:bg-surface-muted transition-all duration-300">
                   <MessageSquare className="h-5 w-5 mr-3" />
-                  TƯ VẤN 1:1
+                  GỬI YÊU CẦU TƯ VẤN
                 </button>
               </div>
 
-              <div className="px-6 py-4 bg-accent/5 rounded-2xl border border-accent/10 mb-10">
-                <p className="text-[10px] font-bold text-accent uppercase tracking-widest mb-1 text-center">Lưu ý thanh toán</p>
-                <p className="text-xs text-gray-500 text-center leading-relaxed">
-                  Vui lòng chuyển khoản kèm theo <span className="text-primary font-bold">địa chỉ Gmail</span> của bạn để nhận source code tự động.
+              <div className="px-6 py-6 bg-amber-50 rounded-2xl border border-amber-100 mb-10">
+                <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2 text-center flex items-center justify-center">
+                  <Clock className="h-4 w-4 mr-2" /> ĐANG PHÁT TRIỂN
+                </p>
+                <p className="text-xs text-amber-700/70 text-center font-bold leading-relaxed">
+                  Hệ thống PetCare đang được hoàn thiện mã nguồn. <br />
+                  Chức năng tải code tạm thời bị khóa.
                 </p>
               </div>
 

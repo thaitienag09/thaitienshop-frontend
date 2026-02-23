@@ -43,28 +43,36 @@ export default function Trangchu() {
         </div>
 
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="text-center max-w-4xl mx-auto animate-fade-in">
-            <div className="inline-flex items-center space-x-2 bg-accent/10 text-accent px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-8">
-              <span>Đẳng cấp doanh nghiệp</span>
+          <div className="max-w-4xl mx-auto text-center space-y-10">
+            <div className="inline-flex items-center space-x-3 px-6 py-2 bg-white/5 backdrop-blur-md rounded-full border border-white/10 animate-fade-in shadow-premium">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-accent"></span>
+              </span>
+              <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-white/80">Systems Under Development</span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold text-primary mb-8 leading-[1.1]">
-              Kiến tạo tương lai với <span className="text-gradient">Giải pháp Quản lý</span> Thú y chuyên nghiệp
+
+            <h1 className="text-5xl sm:text-7xl lg:text-9xl font-black text-white tracking-tighter leading-[0.85] animate-fade-in group">
+              KIẾN TẠO <br />
+              <span className="text-accent group-hover:text-white transition-colors duration-700">TƯƠNG LAI</span> <br />
+              CODE.
             </h1>
-            <p className="text-xl text-gray-500 mb-12 leading-relaxed">
-              thaitienshop cung cấp hệ thống quản lý cửa hàng thú y (PetCare) cao cấp,
-              sử dụng Laravel & MySQL, giúp tối ưu hóa vận hành và chăm sóc thú cưng toàn diện.
+
+            <p className="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto font-medium leading-relaxed animate-fade-in italic">
+              Cửa hàng đang trong quá trình nâng cấp và phát triển các giải pháp Laravel - MySQL chuyên nghiệp. Vui lòng quay lại sớm để trải nghiệm!
             </p>
-            <div className="flex flex-col sm:flex-row gap-5 justify-center">
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-10 animate-fade-in">
               <Link
                 to="/projects"
-                className="bg-primary text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-premium hover:shadow-glow hover:-translate-y-1 transition-all duration-300 flex items-center justify-center group"
+                className="group relative px-12 py-6 bg-white text-primary rounded-[2rem] font-black text-sm uppercase tracking-widest shadow-premium hover:shadow-glow hover:-translate-y-1 transition-all duration-500 overflow-hidden"
               >
-                <span>Khám phá ngay</span>
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <span className="relative z-10">Xem thư viện</span>
+                <div className="absolute inset-0 bg-accent translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
               </Link>
               <Link
                 to="/about"
-                className="bg-white text-primary border border-gray-200 px-10 py-4 rounded-2xl font-bold text-lg shadow-sm hover:bg-gray-50 transition-all duration-300"
+                className="px-12 py-6 bg-white/5 backdrop-blur-md text-white border border-white/10 rounded-[2rem] font-black text-sm uppercase tracking-widest hover:bg-white/10 transition-all duration-500 shadow-premium"
               >
                 Về chúng tôi
               </Link>
