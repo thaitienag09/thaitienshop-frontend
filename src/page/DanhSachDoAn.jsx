@@ -1,36 +1,41 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, Filter, Star, Eye, Download, SlidersHorizontal, X, ChevronRight, LayoutGrid, List, Clock } from 'lucide-react'
+import { db } from '../lib/firebase'
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
 
 export default function DanhSachDoAn() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [sortBy, setSortBy] = useState('newest')
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [projects, setProjects] = useState([])
+  const [loading, setLoading] = useState(true)
 
   const categories = [
     { id: 'all', name: 'Tất cả dự án' },
-    { id: 'web', name: 'Web Development' },
-    { id: 'mobile', name: 'Mobile Application' },
-    { id: 'desktop', name: 'Desktop Software' },
-    { id: 'tools', name: 'Tools & Utilities' }
+    { id: 'Web Development', name: 'Web Development' },
+    { id: 'Mobile Application', name: 'Mobile Application' },
+    { id: 'Desktop Software', name: 'Desktop Software' },
+    { id: 'Tools & Utilities', name: 'Tools & Utilities' },
+    { id: 'AI & Machine Learning', name: 'AI & Machine Learning' }
   ]
 
-  const projects = [
-    {
-      id: 'shop-mon-an',
-      title: 'Hệ thống Đặt đồ ăn trực tuyến Shop Món Ăn (MERN Stack)',
-      description: 'Đồ án Fullstack hoàn chỉnh: Đặt món, Giỏ hàng, Quản lý đơn hàng. Tích hợp trang Admin quản trị món ăn. Giao diện hiện đại, mượt mà và tối ưu hóa trải nghiệm người dùng.',
-      price: '100.000',
-      originalPrice: '300.000',
-      category: 'web',
-      tags: ['React.js', 'Node.js', 'MongoDB', 'JWT'],
-      rating: 5.0,
-      downloads: 88,
-      createdAt: '2024-05-15',
-      image: '/tranghome.png'
-    }
-  ]
+  useEffect(() => {
+    const projectsRef = collection(db, 'projects');
+    const q = query(projectsRef, orderBy('createdAt', 'desc'));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const projectList = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setProjects(projectList);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const filteredProjects = projects.filter(project => {
     const searchLower = searchTerm.toLowerCase().trim()

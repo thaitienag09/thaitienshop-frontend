@@ -1,22 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, QrCode, Mail, Zap, CheckCircle, Copy, ShieldCheck, Clock, PartyPopper, AlertCircle } from 'lucide-react';
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, onValue, off } from "firebase/database";
-
-// Configuration sẽ được điền sau
-const firebaseConfig = {
-    apiKey: "AIzaSyAPURqNXE86MvgqZHLFlIbs2fN2SdRO7qk",
-    authDomain: "shopdoanthaitien.firebaseapp.com",
-    projectId: "shopdoanthaitien",
-    storageBucket: "shopdoanthaitien.firebasestorage.app",
-    messagingSenderId: "545068453271",
-    appId: "1:545068453271:web:5a5d70bb4afb0d2e47c8d2",
-    measurementId: "G-FP65FV0KS1",
-    databaseURL: "https://shopdoanthaitien-default-rtdb.asia-southeast1.firebasedatabase.app" // Đã bỏ dấu gạch chéo cuối
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+import { auth, rtdb as db } from '../lib/firebase';
+import { ref, onValue, set, serverTimestamp } from "firebase/database";
 
 export default function PaymentModal({ isOpen, onClose, project, guestEmail, setGuestEmail }) {
     const [paymentStep, setPaymentStep] = useState(1); // 1: QR, 2: NotifySuccess, 3: Verifying, 4: ConfirmedSuccess, 5: Failed
@@ -24,9 +9,6 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [transactionId, setTransactionId] = useState(null);
     const [lastSubmittedAt, setLastSubmittedAt] = useState(localStorage.getItem(`last_submit_${project.id}`) || 0);
-
-    const TELEGRAM_BOT_TOKEN = '8716710838:AAFBO26c5u-yvR4wkoSSRmNYertmyl5LNmc';
-    const TELEGRAM_CHAT_ID = '5485611388';
 
     // Lắng nghe sự thay đổi từ Firebase khi ở bước Verifying
     useEffect(() => {
@@ -65,7 +47,7 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
         }
     }, [isOpen, lastSubmittedAt, project.id]);
 
-    const sendTelegramNotification = async () => {
+    const handleConfirmPayment = async () => {
         const now = Date.now();
         const cooldown = 5 * 60 * 1000;
         if (now - lastSubmittedAt < cooldown) {
@@ -77,47 +59,31 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
         const newTransactionId = `TX${now.toString().slice(-6)}${Math.floor(Math.random() * 1000)}`;
         setTransactionId(newTransactionId);
 
-        const message = `🔔 *YÊU CẦU XÁC NHẬN THANH TOÁN*
------------------------------
-🆔 *Mã GD:* \`${newTransactionId}\`
-📧 *Khách:* ${guestEmail || 'Không để lại mail'}
-📦 *Sản phẩm:* ${project.title}
-💰 *Số tiền:* 100.000 VNĐ
------------------------------
-🚀 Bạn đã nhận được tiền chưa?`;
-
-        // Gửi tin nhắn kèm nút bấm Inline Keyboard
-        const inlineKeyboard = {
-            inline_keyboard: [
-                [
-                    { text: "✅ ĐÃ NHẬN TIỀN", callback_data: `confirm_tx_${newTransactionId}` },
-                    { text: "❌ CHƯA NHẬN", callback_data: `cancel_tx_${newTransactionId}` }
-                ]
-            ]
-        };
-
         try {
-            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: TELEGRAM_CHAT_ID,
-                    text: message,
-                    parse_mode: 'Markdown',
-                    reply_markup: inlineKeyboard
-                })
+            const txRef = ref(db, `transactions/${newTransactionId}`);
+
+            // Lưu giao dịch vào Firebase thay vì Telegram
+            await set(txRef, {
+                id: newTransactionId,
+                email: guestEmail || 'Guest',
+                projectName: project.title,
+                price: project.price,
+                status: 'pending',
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp(),
+                userId: auth.currentUser?.uid || 'Guest'
             });
 
-            const submitTime = Date.now();
-            localStorage.setItem(`last_submit_${project.id}`, submitTime);
-            setLastSubmittedAt(submitTime);
+            localStorage.setItem(`last_submit_${project.id}`, now);
+            setLastSubmittedAt(now);
 
             setPaymentStep(2);
             setTimeout(() => setPaymentStep(3), 3000);
 
         } catch (error) {
-            console.error('Lỗi gửi Telegram:', error);
-            setPaymentStep(3);
+            console.error('Lỗi lưu giao dịch vào Firebase:', error);
+            alert('Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại.');
+            setPaymentStep(1);
         } finally {
             setIsSubmitting(false);
         }
@@ -150,7 +116,7 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
                             </div>
                             <div className="text-center">
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 leading-none">Quét mã để thanh toán</p>
-                                <p className="text-xl font-black text-primary tracking-tighter">100.000 VNĐ</p>
+                                <p className="text-xl font-black text-primary tracking-tighter">{project.price} VNĐ</p>
                             </div>
                         </div>
 
@@ -196,7 +162,7 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
                                 </div>
 
                                 <button
-                                    onClick={sendTelegramNotification}
+                                    onClick={handleConfirmPayment}
                                     disabled={!guestEmail || isSubmitting}
                                     className={`w-full py-5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center ${guestEmail && !isSubmitting ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-premium' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                         }`}
@@ -237,7 +203,7 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
                         </div>
                         <h3 className="text-3xl font-black text-primary tracking-tighter uppercase mb-4">Đang đợi Admin xác nhận</h3>
                         <p className="text-gray-500 max-w-sm leading-relaxed mb-8 font-medium">
-                            Hệ thống sẽ tự động cập nhật ngay khi Admin nhấn nút xác nhận trên Telegram.
+                            Hệ thống sẽ tự động cập nhật ngay khi Admin nhấn nút xác nhận trên bảng điều khiển Quản trị.
                         </p>
                         <div className="p-4 bg-gray-50 rounded-2xl flex flex-col items-center space-y-3 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                             <div className="flex items-center space-x-3">

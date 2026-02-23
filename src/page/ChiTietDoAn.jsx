@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Star, Download, Eye, CheckCircle, Clock, ChevronLeft, Share2, ShieldCheck, MessageSquare, ChevronRight, QrCode, Zap } from 'lucide-react'
-import { projects } from '../data/projects'
+import { db } from '../lib/firebase'
+import { doc, getDoc } from 'firebase/firestore'
 import PaymentModal from '../components/PaymentModal'
 
 export default function ChiTietDoAn() {
@@ -9,8 +10,43 @@ export default function ChiTietDoAn() {
   const [activeTab, setActiveTab] = useState('description')
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
   const [guestEmail, setGuestEmail] = useState('')
+  const [project, setProject] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  const project = projects[id] || projects['shop-mon-an']
+  useEffect(() => {
+    const fetchProject = async () => {
+      try {
+        const docRef = doc(db, 'projects', id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setProject({ id: docSnap.id, ...docSnap.data() });
+        }
+      } catch (error) {
+        console.error('Error fetching project:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProject();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-surface-muted">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (!project) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-surface-muted text-center p-6">
+        <h1 className="text-3xl font-black text-primary mb-4">KHÔNG TÌM THẤY DỰ ÁN</h1>
+        <p className="text-gray-500 max-w-md mb-8">Dự án bạn đang tìm kiếm không tồn tại hoặc đã bị gỡ bỏ.</p>
+        <Link to="/projects" className="px-8 py-3 bg-primary text-white rounded-xl font-bold uppercase tracking-widest text-xs">Quay lại thư viện</Link>
+      </div>
+    );
+  }
 
   const reviews = [
     {
@@ -61,16 +97,6 @@ export default function ChiTietDoAn() {
                 <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent"></div>
                 <div className="absolute bottom-10 left-10 right-10">
-                  <div className="flex items-center space-x-4 mb-4">
-                    <span className="px-4 py-2 glass-dark text-white rounded-full text-[10px] font-bold uppercase tracking-widest leading-none">
-                      {project.category}
-                    </span>
-                    <div className="flex items-center text-white/90">
-                      <Star className="h-4 w-4 text-yellow-400 fill-current mr-1" />
-                      <span className="text-sm font-bold">{project.rating}</span>
-                      <span className="text-xs text-white/60 ml-1">({project.reviews} đánh giá)</span>
-                    </div>
-                  </div>
                   <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-2">
                     {project.title}
                   </h1>
@@ -129,25 +155,37 @@ export default function ChiTietDoAn() {
 
                   {activeTab === 'requirements' && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {project.requirements.map((req, index) => (
-                        <div key={index} className="flex items-start p-6 bg-surface-muted rounded-3xl border border-gray-100">
-                          <Zap className="h-6 w-6 text-accent mr-4 flex-shrink-0" />
-                          <span className="text-sm font-bold text-primary italic uppercase tracking-wider">{req}</span>
+                      {project.requirements?.length > 0 ? (
+                        project.requirements.map((req, index) => (
+                          <div key={index} className="flex items-start p-6 bg-surface-muted rounded-3xl border border-gray-100">
+                            <Zap className="h-6 w-6 text-accent mr-4 flex-shrink-0" />
+                            <span className="text-sm font-bold text-primary italic uppercase tracking-wider">{req}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="col-span-full py-12 text-center text-gray-400 font-bold italic uppercase tracking-widest">
+                          Dự án này không yêu cầu cấu hình đặc biệt.
                         </div>
-                      ))}
+                      )}
                     </div>
                   )}
 
                   {activeTab === 'includes' && (
                     <div className="space-y-4">
-                      {project.includes.map((item, index) => (
-                        <div key={index} className="flex items-center p-5 bg-white shadow-sm border border-gray-50 rounded-2xl">
-                          <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center mr-5">
-                            <CheckCircle className="h-5 w-5 text-green-500" />
+                      {project.includes?.length > 0 ? (
+                        project.includes.map((item, index) => (
+                          <div key={index} className="flex items-center p-5 bg-white shadow-sm border border-gray-50 rounded-2xl">
+                            <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center mr-5">
+                              <CheckCircle className="h-5 w-5 text-green-500" />
+                            </div>
+                            <span className="text-sm font-semibold text-gray-600">{item}</span>
                           </div>
-                          <span className="text-sm font-semibold text-gray-600">{item}</span>
+                        ))
+                      ) : (
+                        <div className="py-12 text-center text-gray-400 font-bold italic uppercase tracking-widest">
+                          Gói tài sản đang được cập nhật.
                         </div>
-                      ))}
+                      )}
                     </div>
                   )}
 
@@ -186,10 +224,41 @@ export default function ChiTietDoAn() {
               <div className="absolute top-0 left-0 w-full h-2 bg-accent"></div>
               <div className="mb-10 text-center lg:text-left">
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mb-3 block">Mức giá sở hữu</span>
-                <div className="flex items-center justify-center lg:justify-start space-x-4">
+                <div className="flex items-center justify-center lg:justify-start space-x-4 mb-6">
                   <h2 className="text-4xl font-black text-primary tracking-tighter">{project.price}₫</h2>
                   {project.originalPrice && (
                     <span className="text-xl text-gray-400 line-through font-medium opacity-50">{project.originalPrice}₫</span>
+                  )}
+                </div>
+
+                {/* Project Specs & Tech - Sidebar consolidation */}
+                <div className="mt-8 pt-6 border-t border-gray-100 space-y-6">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Loại dự án</p>
+                      <p className="text-xs font-black text-primary uppercase">{project.category}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Đánh giá chung</p>
+                      <div className="flex items-center">
+                        <Star className="h-3 w-3 text-yellow-500 fill-current mr-1" />
+                        <span className="text-xs font-black text-primary">{project.rating}</span>
+                        <span className="text-[8px] text-gray-300 font-bold ml-1 uppercase">({project.reviews || 0})</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {project.tags && project.tags.length > 0 && (
+                    <div className="space-y-3">
+                      <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Stack Công nghệ</p>
+                      <div className="flex flex-wrap gap-2">
+                        {project.tags.map((tag, idx) => (
+                          <span key={idx} className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-[9px] font-black uppercase tracking-widest border border-blue-100/50">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>

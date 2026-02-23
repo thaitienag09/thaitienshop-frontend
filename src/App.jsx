@@ -1,33 +1,70 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link, Outlet } from 'react-router-dom'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import ScrollToTop from './components/ScrollToTop'
 import Trangchu from './page/Trangchu'
 import DanhSachDoAn from './page/DanhSachDoAn'
 import ChiTietDoAn from './page/ChiTietDoAn'
-import ThanhToan from './page/ThanhToan'
-import DonHang from './page/DonHang'
+// import ThanhToan from './page/ThanhToan'
+// import DonHang from './page/DonHang'
 import Auth from './page/Auth'
-import GioiThieu from './page/GioiThieu'
+import ProtectedRoute from './components/ProtectedRoute'
+import AdminLayout from './components/AdminLayout'
+import AdminDashboard from './page/admin/Dashboard'
+import OrderManagement from './page/admin/Orders'
+import UserManagement from './page/admin/Users'
+import ProductManagement from './page/admin/Products'
+import ProductForm from './page/admin/ProductForm'
+
+// Layout for public pages with Header and Footer
+function PublicLayout() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main className="flex-1 pt-24">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  )
+}
 
 export default function App() {
   return (
     <Router>
       <ScrollToTop />
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-1 pt-24">
-          <Routes>
-            <Route path="/" element={<Trangchu />} />
-            <Route path="/projects" element={<DanhSachDoAn />} />
-            <Route path="/project/:id" element={<ChiTietDoAn />} />
-            <Route path="/payment" element={<ThanhToan />} />
-            <Route path="/about" element={<GioiThieu />} />
-            <Route path="*" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl font-bold text-gray-900">404 - Trang không tìm thấy</h1></div>} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <Routes>
+        {/* Public Routes with Header & Footer */}
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<Trangchu />} />
+          <Route path="/projects" element={<DanhSachDoAn />} />
+          <Route path="/project/:id" element={<ChiTietDoAn />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/forgot-password" element={
+            <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6 text-center">
+              <h1 className="text-3xl font-black text-primary mb-4">QUÊN MẬT KHẨU?</h1>
+              <p className="text-gray-500 max-w-md mb-8">Tính năng này đang được phát triển. Vui lòng liên hệ quản trị viên để được hỗ trợ khôi phục mật khẩu.</p>
+              <Link to="/auth" className="px-8 py-3 bg-[#0f172a] text-white rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-slate-800 transition-all">Quay lại đăng nhập</Link>
+            </div>
+          } />
+          <Route path="*" element={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><h1 className="text-2xl font-bold text-gray-900">404 - Trang không tìm thấy</h1></div>} />
+        </Route>
+
+        {/* Admin Routes - Completely separate layout */}
+        <Route path="/admin" element={
+          <ProtectedRoute adminOnly={true}>
+            <AdminLayout />
+          </ProtectedRoute>
+        }>
+          <Route index element={<AdminDashboard />} />
+          <Route path="orders" element={<OrderManagement />} />
+          <Route path="users" element={<UserManagement />} />
+          <Route path="products" element={<ProductManagement />} />
+          <Route path="products/new" element={<ProductForm />} />
+          <Route path="products/edit/:id" element={<ProductForm />} />
+          <Route path="settings" element={<div>Đang phát triển: Cài đặt hệ thống</div>} />
+        </Route>
+      </Routes>
     </Router>
   )
 }
