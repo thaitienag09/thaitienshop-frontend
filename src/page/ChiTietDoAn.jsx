@@ -37,7 +37,7 @@ export default function ChiTietDoAn() {
     category: "Web Development",
     author: {
       name: "thaitienshop",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
+      avatar: "/avtar.png",
       rating: 5.0,
       projects: 50
     },
