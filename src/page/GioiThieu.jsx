@@ -118,27 +118,39 @@ export default function GioiThieu() {
               <div className="relative group">
                 <div className="absolute -inset-4 bg-accent/10 rounded-[3rem] blur-3xl group-hover:bg-accent/20 transition-all duration-700"></div>
                 <div className="relative glass p-10 rounded-[3rem] border border-white/20 aspect-square flex items-center justify-center overflow-hidden shadow-glow">
-                  {/* Abstract Tech Branding */}
+                  {/* Geometric Circuit Branding */}
                   <div className="relative w-full h-full flex items-center justify-center">
-                    <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-transparent rounded-full animate-pulse"></div>
-                    <div className="relative z-10 flex flex-col items-center">
-                      <div className="w-24 h-24 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl flex items-center justify-center mb-6 shadow-2xl transform group-hover:rotate-12 transition-transform duration-700">
-                        <Terminal className="h-12 w-12 text-accent" />
-                      </div>
-                      <div className="text-center space-y-2">
-                        <div className="h-1.5 w-32 bg-white/20 rounded-full mx-auto overflow-hidden">
-                          <div className="h-full bg-accent w-2/3 animate-shimmer"></div>
-                        </div>
-                        <div className="h-1.5 w-24 bg-white/10 rounded-full mx-auto"></div>
-                      </div>
-                    </div>
+                    <svg viewBox="0 0 200 200" className="w-full h-full opacity-40">
+                      <defs>
+                        <linearGradient id="circuit-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.2" />
+                          <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
+                        </linearGradient>
+                      </defs>
+                      {/* Connection Lines */}
+                      <path d="M40,100 L160,100 M100,40 L100,160 M60,60 L140,140 M140,60 L60,140" stroke="white" strokeWidth="0.5" strokeDasharray="4 4" />
+                      {/* Circles */}
+                      <circle cx="100" cy="100" r="40" fill="url(#circuit-grad)" stroke="white" strokeWidth="0.5" />
+                      <circle cx="100" cy="100" r="60" fill="none" stroke="white" strokeWidth="0.2" />
+                      <circle cx="100" cy="100" r="80" fill="none" stroke="white" strokeWidth="0.1" strokeDasharray="10 5" />
 
-                    {/* Floating elements */}
-                    <div className="absolute top-0 right-0 w-12 h-12 glass rounded-xl flex items-center justify-center animate-bounce-slow">
-                      <Code className="h-6 w-6 text-white/30" />
-                    </div>
-                    <div className="absolute bottom-10 left-0 w-10 h-10 glass rounded-xl flex items-center justify-center animate-pulse">
-                      <Cpu className="h-5 w-5 text-white/20" />
+                      {/* Nodes */}
+                      {[
+                        { x: 40, y: 100 }, { x: 160, y: 100 }, { x: 100, y: 40 }, { x: 100, y: 160 },
+                        { x: 60, y: 60 }, { x: 140, y: 140 }, { x: 140, y: 60 }, { x: 60, y: 140 }
+                      ].map((p, i) => (
+                        <circle key={i} cx={p.x} cy={p.y} r="3" fill="white" className="animate-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
+                      ))}
+                    </svg>
+
+                    <div className="relative z-10 flex flex-col items-center">
+                      <div className="w-20 h-20 bg-white shadow-2xl rounded-2xl flex items-center justify-center mb-4 transform rotate-45 group-hover:rotate-[225deg] transition-all duration-1000">
+                        <Code className="h-10 w-10 text-primary -rotate-45 group-hover:rotate-[135deg] transition-all duration-1000" />
+                      </div>
+                      <div className="text-center">
+                        <p className="text-white font-black text-xl tracking-widest">TS</p>
+                        <div className="h-1 w-8 bg-accent mx-auto mt-1 rounded-full"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
