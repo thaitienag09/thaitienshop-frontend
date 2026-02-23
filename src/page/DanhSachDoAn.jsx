@@ -180,8 +180,8 @@ export default function DanhSachDoAn() {
                       key={category.id}
                       onClick={() => setSelectedCategory(category.id)}
                       className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all ${selectedCategory === category.id
-                          ? 'bg-primary text-white shadow-premium'
-                          : 'text-gray-600 hover:bg-gray-100'
+                        ? 'bg-primary text-white shadow-premium'
+                        : 'text-gray-600 hover:bg-gray-100'
                         }`}
                     >
                       <span>{category.name}</span>
@@ -247,22 +247,40 @@ export default function DanhSachDoAn() {
                       ))}
                     </div>
 
-                    <div className="flex items-center justify-between pt-8 border-t border-gray-100/50">
-                      <div className="flex flex-col">
-                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Giá sở hữu</span>
-                        <div className="flex items-center space-x-3">
-                          <span className="text-2xl font-black text-primary">{project.price}₫</span>
-                          {project.originalPrice && (
-                            <span className="text-sm text-gray-400 line-through font-medium">{project.originalPrice}₫</span>
-                          )}
+                    <div className="space-y-4 pt-8 border-t border-gray-100/50">
+                      <div className="flex items-center justify-between">
+                        <div className="flex flex-col">
+                          <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Giá sở hữu</span>
+                          <div className="flex items-center space-x-3">
+                            <span className="text-2xl font-black text-primary">{project.price}₫</span>
+                            {project.originalPrice && (
+                              <span className="text-sm text-gray-400 line-through font-medium">{project.originalPrice}₫</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-end text-xs font-bold text-gray-400 uppercase tracking-widest space-y-1">
+                          <div className="flex items-center">
+                            <Star className="h-3 w-3 text-yellow-400 fill-current mr-1" />
+                            <span className="text-primary">{project.rating}</span>
+                          </div>
+                          <span>{project.downloads}+ lượt tải</span>
                         </div>
                       </div>
-                      <Link
-                        to={`/project/${project.id}`}
-                        className="w-14 h-14 bg-primary text-white flex items-center justify-center rounded-2xl shadow-premium hover:shadow-glow hover:bg-accent transition-all duration-300 transform group-hover:scale-110"
-                      >
-                        <ChevronRight className="h-6 w-6" />
-                      </Link>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <Link
+                          to={`/project/${project.id}`}
+                          className="bg-white text-primary border border-gray-100 py-3 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center hover:bg-gray-50 transition-all duration-300 shadow-sm"
+                        >
+                          CHI TIẾT
+                        </Link>
+                        <Link
+                          to="/payment"
+                          className="bg-primary text-white py-3 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center hover:bg-accent transition-all duration-300 shadow-premium hover:shadow-glow"
+                        >
+                          SỞ HỮU NGAY
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
