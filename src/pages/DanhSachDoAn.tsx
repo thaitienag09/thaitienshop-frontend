@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Search, Star, ChevronRight, LayoutGrid, List, Clock } from 'lucide-react';
 import SEO from '../components/common/SEO';
 import { db } from '../config/firebase';
-import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, limit, startAfter } from 'firebase/firestore';
 import type { Project } from '../types';
 
 interface Category {
@@ -11,14 +11,24 @@ interface Category {
     name: string;
 }
 
+// Helper to optimize Cloudinary images
+const getOptimizedImage = (url: string, width = 800) => {
+    if (!url || !url.includes('cloudinary.com')) return url;
+    const parts = url.split('/upload/');
+    return `${parts[0]}/upload/w_${width},q_auto,f_auto/${parts[1]}`;
+};
+
 export default function DanhSachDoAn() {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [sortBy, setSortBy] = useState('newest');
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
+    const [hasMore, setHasMore] = useState(true);
+    const [lastVisible, setLastVisible] = useState<any>(null);
 
     const categories: Category[] = [
+        // ... (same categories)
         { id: 'all', name: 'Tất cả dự án' },
         { id: 'Web Development', name: 'Web Development' },
         { id: 'Mobile Application', name: 'Mobile Application' },
@@ -28,20 +38,39 @@ export default function DanhSachDoAn() {
     ];
 
     useEffect(() => {
-        const projectsRef = collection(db, 'projects');
-        const q = query(projectsRef, orderBy('createdAt', 'desc'));
+        fetchProjects(true);
+    }, []);
 
-        const unsubscribe = onSnapshot(q, (snapshot) => {
+    const fetchProjects = async (isFirst = true) => {
+        setLoading(true);
+        try {
+            const projectsRef = collection(db, 'projects');
+            let q = query(projectsRef, orderBy('createdAt', 'desc'), limit(12));
+
+            if (!isFirst && lastVisible) {
+                q = query(projectsRef, orderBy('createdAt', 'desc'), startAfter(lastVisible), limit(12));
+            }
+
+            const snapshot = await getDocs(q);
             const projectList = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
             })) as Project[];
-            setProjects(projectList);
-            setLoading(false);
-        });
 
-        return () => unsubscribe();
-    }, []);
+            if (isFirst) {
+                setProjects(projectList);
+            } else {
+                setProjects(prev => [...prev, ...projectList]);
+            }
+
+            setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
+            setHasMore(snapshot.docs.length === 12);
+        } catch (error) {
+            console.error("Error fetching projects:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const filteredProjects = projects.filter(project => {
         const searchLower = searchTerm.toLowerCase().trim();
@@ -165,7 +194,7 @@ export default function DanhSachDoAn() {
                                 {filteredProjects.map((project) => (
                                     <div key={project.id} className="group bg-white rounded-[3rem] shadow-premium hover:shadow-glow hover:-translate-y-2 transition-all duration-700 overflow-hidden border border-gray-50 flex flex-col">
                                         <div className="relative aspect-video overflow-hidden">
-                                            <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                                            <img src={getOptimizedImage(project.image)} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
                                             <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
                                                 <Link to={`/project/${project.id}`} className="w-full py-4 bg-white text-primary rounded-2xl font-black text-[10px] uppercase tracking-widest text-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 shadow-xl">
                                                     Xem chi tiết
@@ -219,6 +248,26 @@ export default function DanhSachDoAn() {
                                     Chúng tôi đang trong quá trình cập nhật thư viện. Vui lòng thử lại với từ khóa khác hoặc quay lại sau.
                                 </p>
                                 <button onClick={clearAllFilters} className="px-10 py-4 bg-primary text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-premium hover:shadow-glow transition-all">Quay lại danh sách</button>
+                            </div>
+                        )}
+
+                        {/* Load More Button */}
+                        {hasMore && projects.length > 0 && (
+                            <div className="mt-16 flex justify-center">
+                                <button
+                                    onClick={() => fetchProjects(false)}
+                                    disabled={loading}
+                                    className="px-12 py-5 bg-white border border-gray-100 rounded-2xl font-black text-xs uppercase tracking-widest text-primary shadow-premium hover:bg-gray-50 hover:-translate-y-1 transition-all disabled:opacity-50 flex items-center"
+                                >
+                                    {loading ? (
+                                        <>
+                                            <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary border-t-transparent mr-3"></div>
+                                            Đang tải...
+                                        </>
+                                    ) : (
+                                        'Xem thêm đồ án'
+                                    )}
+                                </button>
                             </div>
                         )}
                     </div>

@@ -10,6 +10,12 @@ export default async function handler(req: any, res: any) {
             return res.status(400).json({ error: 'Missing transactionId' });
         }
 
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ error: 'Bắt buộc phải có token xác thực (Missing Bearer token).' });
+        }
+        const idToken = authHeader.split('Bearer ')[1];
+
         // 1. Kiểm tra hằng số môi trường
         const config = {
             projectId: process.env.FIREBASE_PROJECT_ID || process.env.VITE_FIREBASE_PROJECT_ID,
@@ -58,9 +64,15 @@ export default async function handler(req: any, res: any) {
         const rtdb = database();
         const fs = firestore();
 
-        // 3. Khởi tạo Resend
-        const { Resend } = await import('resend');
-        const resend = new Resend(config.resendKey);
+        // 3.1 Verify Token & Check Ownership
+        let decodedToken;
+        try {
+            decodedToken = await admin.auth().verifyIdToken(idToken);
+        } catch (authErr) {
+            return res.status(401).json({ error: 'Token không hợp lệ hoặc đã hết hạn.' });
+        }
+
+        const callerUid = decodedToken.uid;
 
         // 4. Lấy thông tin giao dịch
         console.log('📋 Đang lấy giao dịch:', transactionId);
@@ -71,7 +83,24 @@ export default async function handler(req: any, res: any) {
             return res.status(404).json({ error: 'Không tìm thấy giao dịch trên Database.' });
         }
 
+        // Quyền truy cập: Admin hoặc Chủ sở hữu giao dịch
+        let isAuthorized = transaction.userId === callerUid;
+        if (!isAuthorized) {
+            const userDoc = await fs.collection('users').doc(callerUid).get();
+            if (userDoc.exists && userDoc.data()?.role === 'admin') {
+                isAuthorized = true;
+            }
+        }
+
+        if (!isAuthorized) {
+            return res.status(403).json({ error: 'Bạn không có quyền gửi lại mã nguồn cho giao dịch này.' });
+        }
+
         console.log('📋 Giao dịch:', { email: transaction.email, status: transaction.status, projectId: transaction.projectId });
+
+        // 5. Khởi tạo Resend
+        const { Resend } = await import('resend');
+        const resend = new Resend(config.resendKey);
 
         if (transaction.status !== 'success') {
             return res.status(400).json({ error: 'Giao dịch chưa được xác nhận thành công.' });

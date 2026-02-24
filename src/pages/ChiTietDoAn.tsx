@@ -6,9 +6,17 @@ import { doc, getDoc } from 'firebase/firestore'
 import { ref, onValue, query, orderByChild, equalTo } from 'firebase/database'
 import { useAuth } from '@/contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import ReactMarkdown from 'react-markdown'
 import PaymentModal from '@/components/payment/PaymentModal'
+import LoginRequiredModal from '@/components/modals/LoginRequiredModal'
 import SEO from '@/components/common/SEO'
 import type { Project } from '@/types'
+
+const getOptimizedImage = (url: string, width = 1200) => {
+    if (!url || !url.includes('cloudinary.com')) return url;
+    const parts = url.split('/upload/');
+    return `${parts[0]}/upload/w_${width},q_auto,f_auto/${parts[1]}`;
+};
 
 interface Review {
     id: number;
@@ -23,6 +31,7 @@ export default function ChiTietDoAn() {
     const { id } = useParams<{ id: string }>()
     const [activeTab, setActiveTab] = useState('description')
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
     const [project, setProject] = useState<Project | null>(null)
     const [loading, setLoading] = useState(true)
     const { currentUser, isAdmin } = useAuth()
@@ -175,10 +184,10 @@ export default function ChiTietDoAn() {
 
                                 <div className="min-h-[30rem] animate-fade-in">
                                     {activeTab === 'description' && (
-                                        <div className="prose prose-slate max-w-none text-gray-500 leading-loose prose-headings:text-primary prose-strong:text-primary">
-                                            <div className="whitespace-pre-line">
+                                        <div className="prose prose-slate max-w-none text-gray-600 leading-relaxed prose-headings:text-primary prose-strong:text-primary prose-a:text-accent prose-code:text-accent prose-code:bg-accent/5 prose-code:px-1 prose-code:rounded prose-img:rounded-3xl prose-pre:bg-gray-900 prose-pre:text-white">
+                                            <ReactMarkdown>
                                                 {project.fullDescription}
-                                            </div>
+                                            </ReactMarkdown>
                                         </div>
                                     )}
 
@@ -191,7 +200,7 @@ export default function ChiTietDoAn() {
                                                     </h3>
                                                     <div className="rounded-[2rem] overflow-hidden shadow-premium border border-gray-100 group">
                                                         <img
-                                                            src={preview.image}
+                                                            src={getOptimizedImage(preview.image)}
                                                             alt={preview.title}
                                                             className="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-700"
                                                         />
@@ -326,9 +335,7 @@ export default function ChiTietDoAn() {
                                     <button
                                         onClick={() => {
                                             if (!currentUser) {
-                                                if (window.confirm('Bạn cần đăng nhập để thực hiện mua sản phẩm. Chuyển đến trang Đăng nhập?')) {
-                                                    navigate('/auth')
-                                                }
+                                                setIsLoginModalOpen(true)
                                                 return
                                             }
                                             if (isAdmin) {
@@ -422,6 +429,11 @@ export default function ChiTietDoAn() {
                 isOpen={isPaymentModalOpen}
                 onClose={() => setIsPaymentModalOpen(false)}
                 project={project}
+            />
+
+            <LoginRequiredModal
+                isOpen={isLoginModalOpen}
+                onClose={() => setIsLoginModalOpen(false)}
             />
         </div>
     )
