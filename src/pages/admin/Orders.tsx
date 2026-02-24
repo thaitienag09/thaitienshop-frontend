@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { rtdb as db, db as firestore } from '../../config/firebase'
-import { ref, onValue, update } from 'firebase/database'
+import { ref, onValue, update, remove } from 'firebase/database'
 import { collection, getDocs } from 'firebase/firestore'
 import {
     Search,
@@ -9,7 +9,8 @@ import {
     XCircle,
     ShoppingBag,
     Download,
-    AlertCircle
+    AlertCircle,
+    Trash2
 } from 'lucide-react'
 import type { Transaction } from '../../types'
 
@@ -60,6 +61,18 @@ export default function OrderManagement() {
             })
         } catch (error) {
             console.error('Lỗi cập nhật trạng thái:', error)
+        }
+    }
+
+    const handleDeleteOrder = async (orderId: string) => {
+        if (!window.confirm('Bạn có chắc chắn muốn xóa giao dịch này? Hành động này không thể hoàn tác.')) return
+
+        try {
+            await remove(ref(db, `transactions/${orderId}`))
+            alert('Đã xóa giao dịch thành công.')
+        } catch (error: any) {
+            console.error('Lỗi xóa giao dịch:', error)
+            alert(`Không thể xóa: ${error.message || 'Lỗi không xác định'}`)
         }
     }
 
@@ -197,6 +210,13 @@ export default function OrderManagement() {
                                                     title="Hủy đơn"
                                                 >
                                                     <XCircle className="h-4 w-4" />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDeleteOrder(order.id)}
+                                                    className="p-2 bg-gray-50 text-gray-500 rounded-lg hover:bg-red-600 hover:text-white transition-all shadow-sm"
+                                                    title="Xóa vĩnh viễn"
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
                                                 </button>
                                             </div>
                                         </td>

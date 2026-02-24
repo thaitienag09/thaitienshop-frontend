@@ -6,7 +6,7 @@
             "$transactionId": {
                 ".read": "auth != null && (data.child('userId').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin')",
                 ".write": "root.child('users').child(auth.uid).child('role').val() === 'admin' || (auth != null && !data.exists())",
-                ".validate": "newData.hasChildren(['status']) && (newData.child('status').val() === 'pending' || root.child('users').child(auth.uid).child('role').val() === 'admin')"
+                ".validate": "!newData.exists() || (newData.hasChildren(['status']) && (newData.child('status').val() === 'pending' || root.child('users').child(auth.uid).child('role').val() === 'admin'))"
             }
         },
         "users": {

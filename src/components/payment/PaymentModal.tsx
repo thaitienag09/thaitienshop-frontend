@@ -16,7 +16,7 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
     const [paymentStep, setPaymentStep] = useState(1) // 1: QR, 2: NotifySuccess, 3: Verifying, 4: ConfirmedSuccess, 5: Failed
     const [isCopied, setIsCopied] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const [transactionId, setTransactionId] = useState<string | null>(null)
+    const [transactionId, setTransactionId] = useState<string | null>(localStorage.getItem(`last_tx_id_${project.id}`))
     const [lastSubmittedAt, setLastSubmittedAt] = useState(Number(localStorage.getItem(`last_submit_${project.id}`)) || 0)
 
     // Lắng nghe sự thay đổi từ Firebase khi ở bước Verifying
@@ -31,6 +31,11 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
                 console.log("📡 Nhận dữ liệu từ Firebase:", status)
                 if (status === 'success') {
                     setPaymentStep(4)
+                    // Xóa hoàn toàn dấu vết để khách hàng có thể tạo lệnh mới nếu muốn
+                    localStorage.removeItem(`last_submit_${project.id}`)
+                    localStorage.removeItem(`last_tx_id_${project.id}`)
+                    setLastSubmittedAt(0)
+                    setTransactionId(null)
                 } else if (status === 'failed') {
                     setPaymentStep(5)
                 }
@@ -42,12 +47,22 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
         }
     }, [paymentStep, transactionId])
 
+    // Tự động đóng modal sau 3 giây khi thanh toán thành công
+    useEffect(() => {
+        if (paymentStep === 4) {
+            const timer = setTimeout(() => {
+                onClose()
+            }, 3000)
+            return () => clearTimeout(timer)
+        }
+    }, [paymentStep, onClose])
+
     useEffect(() => {
         if (!isOpen) {
             const now = Date.now()
             const cooldown = 5 * 60 * 1000
-            if (now - lastSubmittedAt < cooldown) {
-                setPaymentStep(paymentStep === 4 ? 4 : 3)
+            if (now - lastSubmittedAt < cooldown && transactionId) {
+                setPaymentStep(3)
             } else {
                 setPaymentStep(1)
             }
@@ -82,6 +97,7 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
             })
 
             localStorage.setItem(`last_submit_${project.id}`, String(now))
+            localStorage.setItem(`last_tx_id_${project.id}`, newTransactionId)
             setLastSubmittedAt(now)
 
             setPaymentStep(2)
@@ -223,6 +239,18 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
                                     className="text-accent hover:underline mt-2"
                                 >
                                     Nếu Admin đã bấm mà chưa thấy gì, nhấn vào đây để tải lại trang
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        localStorage.removeItem(`last_submit_${project.id}`)
+                                        localStorage.removeItem(`last_tx_id_${project.id}`)
+                                        setLastSubmittedAt(0)
+                                        setTransactionId(null)
+                                        setPaymentStep(1)
+                                    }}
+                                    className="text-red-500 hover:text-red-700 font-bold mt-4 border border-red-200 px-4 py-2 rounded-xl bg-red-50"
+                                >
+                                    Hủy và tạo lệnh chuyển tiền mới
                                 </button>
                             </div>
                         </div>
