@@ -1,6 +1,3 @@
-import { Resend } from 'resend';
-import * as admin from 'firebase-admin';
-
 export default async function handler(req: any, res: any) {
     // Luôn luôn trả về JSON kể cả khi lỗi cực nặng
     try {
@@ -33,30 +30,39 @@ export default async function handler(req: any, res: any) {
             });
         }
 
-        // 2. Khởi tạo Firebase Admin an toàn
-        if (!admin.apps?.length) {
+        // 2. Khởi tạo Firebase Admin an toàn (dynamic import cho Vercel serverless)
+        const admin = await import('firebase-admin');
+        const { credential, initializeApp, apps, database, firestore } = admin.default || admin;
+
+        if (!apps || apps.length === 0) {
             try {
-                // Sử dụng cấu trúc an toàn hơn cho Vercel Edge/Serverless
                 const serviceAccount = {
                     projectId: config.projectId,
                     clientEmail: config.clientEmail,
                     privateKey: config.privateKey?.replace(/\\n/g, '\n'),
                 };
 
-                admin.initializeApp({
-                    credential: admin.credential.cert(serviceAccount as any),
+                initializeApp({
+                    credential: credential.cert(serviceAccount as any),
                     databaseURL: config.databaseURL,
                 });
+                console.log('✅ Firebase Admin initialized successfully');
             } catch (initErr: any) {
-                return res.status(500).json({ error: `Lỗi khởi tạo Firebase: ${initErr.message}` });
+                // Nếu đã khởi tạo rồi thì bỏ qua lỗi duplicate
+                if (!initErr.message?.includes('already exists')) {
+                    return res.status(500).json({ error: `Lỗi khởi tạo Firebase: ${initErr.message}` });
+                }
             }
         }
 
-        const rtdb = admin.database();
-        const firestore = admin.firestore();
+        const rtdb = database();
+        const fs = firestore();
+
+        // 3. Khởi tạo Resend
+        const { Resend } = await import('resend');
         const resend = new Resend(config.resendKey);
 
-        // 3. Lấy thông tin giao dịch
+        // 4. Lấy thông tin giao dịch
         console.log('📋 Đang lấy giao dịch:', transactionId);
         const txSnapshot = await rtdb.ref(`transactions/${transactionId}`).once('value');
         const transaction = txSnapshot.val();
@@ -71,9 +77,9 @@ export default async function handler(req: any, res: any) {
             return res.status(400).json({ error: 'Giao dịch chưa được xác nhận thành công.' });
         }
 
-        // 4. Lấy link mã nguồn
+        // 5. Lấy link mã nguồn
         console.log('📦 Đang lấy sản phẩm:', transaction.projectId);
-        const projectDoc = await firestore.collection('projects').doc(transaction.projectId).get();
+        const projectDoc = await fs.collection('projects').doc(transaction.projectId).get();
         if (!projectDoc.exists) {
             return res.status(404).json({ error: 'Không tìm thấy sản phẩm tương ứng.' });
         }
@@ -83,7 +89,7 @@ export default async function handler(req: any, res: any) {
             return res.status(400).json({ error: 'Sản phẩm này chưa được cấu hình Link mã nguồn (sourceCodeUrl).' });
         }
 
-        // 5. Gửi email
+        // 6. Gửi email
         console.log('📧 Đang gửi email đến:', transaction.email, '| From:', config.fromEmail);
         const { data, error } = await resend.emails.send({
             from: config.fromEmail,
@@ -106,9 +112,11 @@ export default async function handler(req: any, res: any) {
         });
 
         if (error) {
+            console.error('❌ Resend error:', error);
             return res.status(500).json({ error: `Lỗi từ Resend: ${JSON.stringify(error)}` });
         }
 
+        console.log('✅ Email sent successfully:', data);
         return res.status(200).json({ message: 'Email sent successfully', data });
 
     } catch (criticalError: any) {
