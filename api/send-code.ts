@@ -1,64 +1,78 @@
 import { Resend } from 'resend';
 import * as admin from 'firebase-admin';
 
-// Initialize Firebase Admin
-if (!admin.apps.length) {
-    const projectId = process.env.FIREBASE_PROJECT_ID || process.env.VITE_FIREBASE_PROJECT_ID;
-    const databaseURL = process.env.FIREBASE_DATABASE_URL || process.env.VITE_FIREBASE_DATABASE_URL;
-
-    console.log('🔥 Initializing Firebase Admin for Project:', projectId);
-
-    admin.initializeApp({
-        credential: admin.credential.cert({
-            projectId: projectId,
-            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-            privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-        }),
-        databaseURL: databaseURL,
-    });
-}
-
-const rtdb = admin.database();
-const firestore = admin.firestore();
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export default async function handler(req: any, res: any) {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method not allowed' });
-    }
-
-    const { transactionId } = req.body;
-
-    if (!transactionId) {
-        return res.status(400).json({ error: 'Missing transactionId' });
-    }
-
+    // Luôn luôn trả về JSON kể cả khi lỗi cực nặng
     try {
-        // 1. Fetch transaction from RTDB
+        if (req.method !== 'POST') {
+            return res.status(405).json({ error: 'Method not allowed' });
+        }
+
+        const { transactionId } = req.body;
+        if (!transactionId) {
+            return res.status(400).json({ error: 'Missing transactionId' });
+        }
+
+        // 1. Kiểm tra hằng số môi trường
+        const config = {
+            projectId: process.env.FIREBASE_PROJECT_ID || process.env.VITE_FIREBASE_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            privateKey: process.env.FIREBASE_PRIVATE_KEY,
+            databaseURL: process.env.FIREBASE_DATABASE_URL || process.env.VITE_FIREBASE_DATABASE_URL,
+            resendKey: process.env.RESEND_API_KEY
+        };
+
+        const missing = Object.entries(config).filter(([k, v]) => !v).map(([k]) => k);
+        if (missing.length > 0) {
+            return res.status(500).json({
+                error: `Thiếu cấu hình biến môi trường: ${missing.join(', ')}. Hãy kiểm tra Dashboard Vercel.`
+            });
+        }
+
+        // 2. Khởi tạo Firebase Admin an toàn
+        if (!admin.apps.length) {
+            try {
+                admin.initializeApp({
+                    credential: admin.credential.cert({
+                        projectId: config.projectId,
+                        clientEmail: config.clientEmail,
+                        privateKey: config.privateKey?.replace(/\\n/g, '\n'),
+                    }),
+                    databaseURL: config.databaseURL,
+                });
+            } catch (initErr: any) {
+                return res.status(500).json({ error: `Lỗi khởi tạo Firebase: ${initErr.message}` });
+            }
+        }
+
+        const rtdb = admin.database();
+        const firestore = admin.firestore();
+        const resend = new Resend(config.resendKey);
+
+        // 3. Lấy thông tin giao dịch
         const txSnapshot = await rtdb.ref(`transactions/${transactionId}`).once('value');
         const transaction = txSnapshot.val();
 
         if (!transaction) {
-            return res.status(404).json({ error: 'Transaction not found' });
+            return res.status(404).json({ error: 'Không tìm thấy giao dịch trên Database.' });
         }
 
         if (transaction.status !== 'success') {
-            return res.status(400).json({ error: 'Transaction is not confirmed yet' });
+            return res.status(400).json({ error: 'Giao dịch chưa được xác nhận thành công.' });
         }
 
-        // 2. Fetch project from Firestore to get sourceCodeUrl
+        // 4. Lấy link mã nguồn
         const projectDoc = await firestore.collection('projects').doc(transaction.projectId).get();
         if (!projectDoc.exists) {
-            return res.status(404).json({ error: 'Project not found' });
+            return res.status(404).json({ error: 'Không tìm thấy sản phẩm tương ứng.' });
         }
-        const projectData = projectDoc.data();
-        const sourceCodeUrl = projectData?.sourceCodeUrl;
 
+        const sourceCodeUrl = projectDoc.data()?.sourceCodeUrl;
         if (!sourceCodeUrl) {
-            return res.status(400).json({ error: 'Source code link not configured for this project' });
+            return res.status(400).json({ error: 'Sản phẩm này chưa được cấu hình Link mã nguồn.' });
         }
 
-        // 3. Send email via Resend
+        // 5. Gửi email
         const { data, error } = await resend.emails.send({
             from: 'thaitienshop <onboarding@resend.dev>',
             to: [transaction.email],
@@ -80,14 +94,15 @@ export default async function handler(req: any, res: any) {
         });
 
         if (error) {
-            console.error('Resend Error:', error);
-            return res.status(500).json({ error: 'Failed to send email' });
+            return res.status(500).json({ error: `Lỗi từ Resend: ${JSON.stringify(error)}` });
         }
 
         return res.status(200).json({ message: 'Email sent successfully', data });
 
-    } catch (error: any) {
-        console.error('API Error:', error);
-        return res.status(500).json({ error: error.message });
+    } catch (criticalError: any) {
+        console.error('CRITICAL API ERROR:', criticalError);
+        return res.status(500).json({
+            error: `Lỗi hệ thống nghiêm trọng: ${criticalError.message || criticalError}`
+        });
     }
 }
