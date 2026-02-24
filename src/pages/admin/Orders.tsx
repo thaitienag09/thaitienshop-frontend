@@ -59,8 +59,27 @@ export default function OrderManagement() {
                 status: newStatus,
                 updatedAt: Date.now()
             })
+
+            // Nếu xác nhận thành công, gọi API gửi mail tự động
+            if (newStatus === 'success') {
+                console.log('📡 Đang gửi email tự động cho đơn hàng:', orderId)
+                const response = await fetch('/api/send-code', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ transactionId: orderId })
+                })
+
+                const result = await response.json()
+                if (response.ok) {
+                    alert('Đã xác nhận và gửi email thành công!')
+                } else {
+                    console.error('Lỗi gửi mail:', result.error)
+                    alert(`Đã xác nhận trạng thái nhưng có lỗi gửi mail: ${result.error}`)
+                }
+            }
         } catch (error) {
             console.error('Lỗi cập nhật trạng thái:', error)
+            alert('Có lỗi xảy ra khi cập nhật trạng thái.')
         }
     }
 

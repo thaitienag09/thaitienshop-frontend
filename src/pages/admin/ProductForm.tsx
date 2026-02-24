@@ -66,7 +66,8 @@ export default function ProductForm() {
             avatar: '/avtar.png',
             rating: 5.0,
             projects: 20
-        }
+        },
+        sourceCodeUrl: ''
     })
 
     const [newTag, setNewTag] = useState('')
@@ -106,6 +107,7 @@ export default function ProductForm() {
                         rating: 5.0,
                         projects: 20
                     },
+                    sourceCodeUrl: data.sourceCodeUrl || '',
                     id: projectId
                 })
             } else {
@@ -489,6 +491,27 @@ export default function ProductForm() {
                                 onChange={handleChange}
                                 className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all font-bold"
                             />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Source Code Link */}
+                <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+                    <div className="flex items-center space-x-3 mb-2">
+                        <Save className="h-5 w-5 text-blue-600" />
+                        <h2 className="font-bold text-gray-900">Link Mã nguồn (Gửi tự động khi khách mua)</h2>
+                    </div>
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Đường dẫn tải Source Code (Drive/GitHub...)</label>
+                            <input
+                                name="sourceCodeUrl"
+                                value={formData.sourceCodeUrl}
+                                onChange={handleChange}
+                                placeholder="Ví dụ: https://drive.google.com/file/d/..."
+                                className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all font-bold text-blue-600"
+                            />
+                            <p className="text-[10px] text-gray-400 italic">Lưu ý: Link này sẽ được gửi tự động qua Email ngay khi bạn xác nhận đơn hàng thành công.</p>
                         </div>
                     </div>
                 </div>

@@ -31,6 +31,7 @@ export interface Project {
     downloads: number;
     reviews: number;
     author: Author;
+    sourceCodeUrl?: string;
     createdAt: string;
     updatedAt: string;
 }
