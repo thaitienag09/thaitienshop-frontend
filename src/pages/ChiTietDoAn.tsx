@@ -3,6 +3,8 @@ import { Link, useParams } from 'react-router-dom'
 import { Star, Download, Eye, CheckCircle, Clock, ChevronLeft, Share2, ShieldCheck, MessageSquare, ChevronRight, QrCode, Zap } from 'lucide-react'
 import { db } from '@/config/firebase'
 import { doc, getDoc } from 'firebase/firestore'
+import { useAuth } from '@/contexts/AuthContext'
+import { useNavigate } from 'react-router-dom'
 import PaymentModal from '@/components/payment/PaymentModal'
 import SEO from '@/components/common/SEO'
 import type { Project } from '@/types'
@@ -20,9 +22,10 @@ export default function ChiTietDoAn() {
     const { id } = useParams<{ id: string }>()
     const [activeTab, setActiveTab] = useState('description')
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
-    const [guestEmail, setGuestEmail] = useState('')
     const [project, setProject] = useState<Project | null>(null)
     const [loading, setLoading] = useState(true)
+    const { currentUser, isAdmin } = useAuth()
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchProject = async () => {
@@ -282,7 +285,19 @@ export default function ChiTietDoAn() {
 
                             <div className="space-y-4 mb-8">
                                 <button
-                                    onClick={() => setIsPaymentModalOpen(true)}
+                                    onClick={() => {
+                                        if (!currentUser) {
+                                            if (window.confirm('Bạn cần đăng nhập để thực hiện mua sản phẩm. Chuyển đến trang Đăng nhập?')) {
+                                                navigate('/auth')
+                                            }
+                                            return
+                                        }
+                                        if (isAdmin) {
+                                            alert('Admin không thể mua sản phẩm của chính mình.')
+                                            return
+                                        }
+                                        setIsPaymentModalOpen(true)
+                                    }}
                                     className="w-full bg-blue-600 text-white py-6 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center hover:bg-blue-700 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
                                 >
                                     <QrCode className="h-5 w-5 mr-3" />
@@ -367,8 +382,6 @@ export default function ChiTietDoAn() {
                 isOpen={isPaymentModalOpen}
                 onClose={() => setIsPaymentModalOpen(false)}
                 project={project}
-                guestEmail={guestEmail}
-                setGuestEmail={setGuestEmail}
             />
         </div>
     )

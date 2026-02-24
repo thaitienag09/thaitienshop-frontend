@@ -3,13 +3,18 @@ import * as admin from 'firebase-admin';
 
 // Initialize Firebase Admin
 if (!admin.apps.length) {
+    const projectId = process.env.FIREBASE_PROJECT_ID || process.env.VITE_FIREBASE_PROJECT_ID;
+    const databaseURL = process.env.FIREBASE_DATABASE_URL || process.env.VITE_FIREBASE_DATABASE_URL;
+
+    console.log('🔥 Initializing Firebase Admin for Project:', projectId);
+
     admin.initializeApp({
         credential: admin.credential.cert({
-            projectId: process.env.VITE_FIREBASE_PROJECT_ID,
+            projectId: projectId,
             clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
             privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
         }),
-        databaseURL: process.env.VITE_FIREBASE_DATABASE_URL,
+        databaseURL: databaseURL,
     });
 }
 

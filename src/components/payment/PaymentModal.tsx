@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react'
 import { X, QrCode, Mail, Zap, CheckCircle, Copy, ShieldCheck, PartyPopper, AlertCircle } from 'lucide-react'
-import { rtdb as db, auth } from '@/config/firebase'
+import { rtdb as db } from '@/config/firebase'
 import { ref, onValue, set, serverTimestamp, Unsubscribe } from 'firebase/database'
+import { useAuth } from '@/contexts/AuthContext'
 import type { Project } from '@/types'
 
 interface PaymentModalProps {
     isOpen: boolean;
     onClose: () => void;
     project: Project;
-    guestEmail: string;
-    setGuestEmail: (email: string) => void;
 }
 
-export default function PaymentModal({ isOpen, onClose, project, guestEmail, setGuestEmail }: PaymentModalProps) {
+export default function PaymentModal({ isOpen, onClose, project }: PaymentModalProps) {
+    const { currentUser } = useAuth()
+    const userEmail = currentUser?.email || ''
+
     const [paymentStep, setPaymentStep] = useState(1) // 1: QR, 2: NotifySuccess, 3: Verifying, 4: ConfirmedSuccess, 5: Failed
     const [isCopied, setIsCopied] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -86,14 +88,14 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
 
             await set(txRef, {
                 id: newTransactionId,
-                email: guestEmail || 'Guest',
+                email: userEmail,
                 projectId: project.id,
                 projectName: project.title,
                 price: project.price,
                 status: 'pending',
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
-                userId: auth.currentUser?.uid || 'Guest'
+                userId: currentUser?.uid
             })
 
             localStorage.setItem(`last_submit_${project.id}`, String(now))
@@ -132,7 +134,7 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
                         <div className="bg-gray-50 p-12 flex flex-col items-center justify-center border-r border-gray-100">
                             <div className="bg-white p-6 rounded-[2.5rem] shadow-premium mb-8 w-full aspect-square flex items-center justify-center overflow-hidden">
                                 <img
-                                    src={`https://img.vietqr.io/image/VIB-913263053-compact2.png?amount=${project.price}&addInfo=${encodeURIComponent(guestEmail + " " + project.title)}&accountName=DUONG%20THAI%20TIEN`}
+                                    src={`https://img.vietqr.io/image/VIB-913263053-compact2.png?amount=${project.price}&addInfo=${encodeURIComponent(userEmail + " " + project.title)}&accountName=DUONG%20THAI%20TIEN`}
                                     alt="VietQR Payment"
                                     className="w-full h-auto"
                                 />
@@ -171,23 +173,20 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
                                 </div>
 
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2 block text-left">Email nhận code</label>
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2 block text-left">Email nhận code (Tự động)</label>
                                     <div className="relative group">
                                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                        <input
-                                            type="email"
-                                            placeholder="example@gmail.com"
-                                            value={guestEmail}
-                                            onChange={(e) => setGuestEmail(e.target.value)}
-                                            className="w-full pl-12 pr-4 py-4 bg-gray-50 border-none rounded-2xl text-xs font-bold focus:ring-2 focus:ring-accent/20 transition-all outline-none"
-                                        />
+                                        <div className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-blue-100/50 rounded-2xl text-xs font-bold text-primary flex items-center">
+                                            {userEmail}
+                                        </div>
                                     </div>
+                                    <p className="text-[9px] text-gray-400 italic ml-2 mt-1">* Source code sẽ được gửi tự động vào email này.</p>
                                 </div>
 
                                 <button
                                     onClick={handleConfirmPayment}
-                                    disabled={!guestEmail || isSubmitting}
-                                    className={`w-full py-5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center ${guestEmail && !isSubmitting ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-premium' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                    disabled={!userEmail || isSubmitting}
+                                    className={`w-full py-5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center ${userEmail && !isSubmitting ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-premium' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                         }`}
                                 >
                                     {isSubmitting ? (
@@ -264,7 +263,7 @@ export default function PaymentModal({ isOpen, onClose, project, guestEmail, set
                         </div>
                         <h3 className="text-4xl font-black text-primary tracking-tighter uppercase mb-4">THANH TOÁN THÀNH CÔNG!</h3>
                         <p className="text-gray-500 max-w-sm leading-relaxed mb-10 font-medium">
-                            Cảm ơn bạn đã ủng hộ! Mã nguồn đã được kích hoạt chuyển giao đến email: <span className="text-green-600 font-bold">{guestEmail}</span>
+                            Cảm ơn bạn đã ủng hộ! Mã nguồn đã được kích hoạt chuyển giao đến email: <span className="text-green-600 font-bold">{userEmail}</span>
                         </p>
                         <button
                             onClick={onClose}

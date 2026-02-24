@@ -118,7 +118,7 @@ export default function OrderManagement() {
         <div className="space-y-6 animate-fadeIn">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Quản lý đơn hàng</h1>
+                    <h1 className="text-2xl font-bold text-gray-900">Quản lý đơn hàng <span className="text-[10px] text-gray-300 font-normal">v2.1</span></h1>
                     <p className="text-gray-500 font-medium text-sm">Quản lý và cập nhật trạng thái thanh toán của khách hàng.</p>
                 </div>
                 <div className="flex items-center gap-3">
