@@ -61,43 +61,9 @@ export default function OrderManagement() {
             })
 
             if (newStatus === 'success') {
-                console.log('📡 Đang gửi email tự động cho đơn hàng:', orderId)
-                try {
-                    const response = await fetch('/api/send-code', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ transactionId: orderId })
-                    })
-
-                    let result
-                    try {
-                        result = await response.json()
-                    } catch (e) {
-                        throw new Error('Máy chủ không phản hồi đúng định dạng JSON. Vui lòng kiểm tra lại cấu hình API trên Vercel.')
-                    }
-
-                    if (response.ok) {
-                        alert('✅ Đã xác nhận và gửi email thành công!')
-                    } else {
-                        console.error('Lỗi gửi mail:', result.error)
-                        const errorMsg = result.error || 'Không xác định'
-                        alert(
-                            `⚠️ Đã xác nhận trạng thái THÀNH CÔNG nhưng gửi email thất bại.\n\n` +
-                            `Lỗi: ${errorMsg}\n\n` +
-                            `Gợi ý:\n` +
-                            `- Kiểm tra biến RESEND_API_KEY và RESEND_FROM_EMAIL trên Vercel Dashboard\n` +
-                            `- Nếu dùng onboarding@resend.dev, email chỉ gửi được đến email đã verify trên Resend\n` +
-                            `- Thêm custom domain trên resend.com/domains để gửi đến mọi email`
-                        )
-                    }
-                } catch (emailError: any) {
-                    console.error('Lỗi gửi email:', emailError)
-                    alert(
-                        `⚠️ Đã xác nhận thanh toán nhưng gửi email thất bại.\n\n` +
-                        `Lỗi: ${emailError.message}\n\n` +
-                        `Trạng thái đơn hàng vẫn là "success". Bạn có thể gửi lại email thủ công.`
-                    )
-                }
+                alert('✅ Đã xác nhận thanh toán thành công! Khách hàng sẽ nhận link tải trên web.')
+            } else if (newStatus === 'failed') {
+                alert('❌ Đã đánh dấu giao dịch thất bại.')
             }
         } catch (error: any) {
             console.error('Lỗi cập nhật trạng thái:', error)

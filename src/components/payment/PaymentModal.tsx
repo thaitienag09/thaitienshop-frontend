@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { X, QrCode, Mail, Zap, CheckCircle, Copy, ShieldCheck, PartyPopper, AlertCircle } from 'lucide-react'
+import { X, QrCode, Zap, CheckCircle, Copy, ShieldCheck, PartyPopper, AlertCircle, Download, ExternalLink } from 'lucide-react'
 import { rtdb as db } from '@/config/firebase'
 import { ref, onValue, set, serverTimestamp, Unsubscribe } from 'firebase/database'
 import { useAuth } from '@/contexts/AuthContext'
@@ -175,12 +175,12 @@ export default function PaymentModal({ isOpen, onClose, project }: PaymentModalP
                                 <div className="space-y-3">
                                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2 block text-left">Email nhận code (Tự động)</label>
                                     <div className="relative group">
-                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                        <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                                         <div className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-blue-100/50 rounded-2xl text-xs font-bold text-primary flex items-center">
                                             {userEmail}
                                         </div>
                                     </div>
-                                    <p className="text-[9px] text-gray-400 italic ml-2 mt-1">* Source code sẽ được gửi tự động vào email này.</p>
+                                    <p className="text-[9px] text-gray-400 italic ml-2 mt-1">* Email dùng để xác định tài khoản thanh toán.</p>
                                 </div>
 
                                 <button
@@ -262,14 +262,32 @@ export default function PaymentModal({ isOpen, onClose, project }: PaymentModalP
                             <CheckCircle className="h-10 w-10 md:h-12 md:w-12 text-white" />
                         </div>
                         <h3 className="text-2xl md:text-4xl font-black text-primary tracking-tighter uppercase mb-4">THANH TOÁN THÀNH CÔNG!</h3>
-                        <p className="text-sm md:text-base text-gray-500 max-w-sm leading-relaxed mb-6 md:mb-10 font-medium">
-                            Cảm ơn bạn đã ủng hộ! Mã nguồn đã được kích hoạt chuyển giao đến email: <span className="text-green-600 font-bold break-all">{userEmail}</span>
+                        <p className="text-sm md:text-base text-gray-500 max-w-sm leading-relaxed mb-6 font-medium">
+                            Cảm ơn bạn đã ủng hộ! Nhấn nút bên dưới để tải mã nguồn ngay.
                         </p>
+
+                        {project.sourceCodeUrl ? (
+                            <a
+                                href={project.sourceCodeUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-green-500 hover:bg-green-600 text-white py-4 md:py-5 px-8 md:px-10 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-premium flex items-center gap-3 mb-4"
+                            >
+                                <Download className="h-5 w-5" />
+                                TẢI MÃ NGUỒN NGAY
+                                <ExternalLink className="h-4 w-4" />
+                            </a>
+                        ) : (
+                            <p className="text-sm text-red-500 font-medium mb-4 bg-red-50 px-4 py-3 rounded-xl">
+                                ⚠️ Link mã nguồn chưa được cấu hình. Vui lòng liên hệ Admin.
+                            </p>
+                        )}
+
                         <button
                             onClick={onClose}
-                            className="bg-primary text-white py-5 px-10 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-accent transition-all shadow-premium"
+                            className="text-gray-400 hover:text-primary font-bold text-xs uppercase tracking-widest transition-all mt-2"
                         >
-                            HOÀN TẤT & ĐÓNG
+                            Đóng
                         </button>
                     </div>
                 )}
