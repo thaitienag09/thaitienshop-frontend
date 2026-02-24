@@ -34,7 +34,7 @@ export default async function handler(req: any, res: any) {
         }
 
         // 2. Khởi tạo Firebase Admin an toàn
-        if (!admin.apps.length) {
+        if (!admin.apps?.length) {
             try {
                 // Sử dụng cấu trúc an toàn hơn cho Vercel Edge/Serverless
                 const serviceAccount = {
