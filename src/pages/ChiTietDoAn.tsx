@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Star, Download, Eye, CheckCircle, Clock, ChevronLeft, Share2, ShieldCheck, MessageSquare, ChevronRight, QrCode, Zap } from 'lucide-react'
-import { db } from '@/config/firebase'
+import { db, rtdb } from '@/config/firebase'
 import { doc, getDoc } from 'firebase/firestore'
+import { ref, onValue, query, orderByChild, equalTo } from 'firebase/database'
 import { useAuth } from '@/contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import PaymentModal from '@/components/payment/PaymentModal'
@@ -25,6 +26,7 @@ export default function ChiTietDoAn() {
     const [project, setProject] = useState<Project | null>(null)
     const [loading, setLoading] = useState(true)
     const { currentUser, isAdmin } = useAuth()
+    const [isPurchased, setIsPurchased] = useState(false)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -43,7 +45,33 @@ export default function ChiTietDoAn() {
             }
         };
         fetchProject();
-    }, [id]);
+
+        if (!currentUser || !id) {
+            setIsPurchased(false)
+            return
+        }
+
+        const transactionsRef = ref(rtdb, 'transactions')
+        const purchaseQuery = query(
+            transactionsRef,
+            orderByChild('userId'),
+            equalTo(currentUser.uid)
+        )
+
+        const unsubscribe = onValue(purchaseQuery, (snapshot) => {
+            const data = snapshot.val()
+            if (data) {
+                const purchased = Object.values(data).some((tx: any) =>
+                    tx.projectId === id && tx.status === 'success'
+                )
+                setIsPurchased(purchased)
+            } else {
+                setIsPurchased(false)
+            }
+        })
+
+        return () => unsubscribe()
+    }, [id, currentUser])
 
     if (loading) {
         return (
@@ -284,25 +312,37 @@ export default function ChiTietDoAn() {
                             </div>
 
                             <div className="space-y-4 mb-8">
-                                <button
-                                    onClick={() => {
-                                        if (!currentUser) {
-                                            if (window.confirm('Bạn cần đăng nhập để thực hiện mua sản phẩm. Chuyển đến trang Đăng nhập?')) {
-                                                navigate('/auth')
+                                {isPurchased ? (
+                                    <a
+                                        href={project.sourceCodeUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-full bg-green-600 text-white py-6 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center hover:bg-green-700 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+                                    >
+                                        <Download className="h-5 w-5 mr-3" />
+                                        TẢI MÃ NGUỒN (ĐÃ MUA)
+                                    </a>
+                                ) : (
+                                    <button
+                                        onClick={() => {
+                                            if (!currentUser) {
+                                                if (window.confirm('Bạn cần đăng nhập để thực hiện mua sản phẩm. Chuyển đến trang Đăng nhập?')) {
+                                                    navigate('/auth')
+                                                }
+                                                return
                                             }
-                                            return
-                                        }
-                                        if (isAdmin) {
-                                            alert('Admin không thể mua sản phẩm của chính mình.')
-                                            return
-                                        }
-                                        setIsPaymentModalOpen(true)
-                                    }}
-                                    className="w-full bg-blue-600 text-white py-6 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center hover:bg-blue-700 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-                                >
-                                    <QrCode className="h-5 w-5 mr-3" />
-                                    MUA NGAY (QUÉT MÃ QR)
-                                </button>
+                                            if (isAdmin) {
+                                                alert('Admin không thể mua sản phẩm của chính mình.')
+                                                return
+                                            }
+                                            setIsPaymentModalOpen(true)
+                                        }}
+                                        className="w-full bg-blue-600 text-white py-6 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center hover:bg-blue-700 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+                                    >
+                                        <QrCode className="h-5 w-5 mr-3" />
+                                        MUA NGAY (QUÉT MÃ QR)
+                                    </button>
+                                )}
                                 <button className="w-full bg-surface-muted text-primary border border-gray-100 py-6 px-8 rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center justify-center hover:bg-gray-100 transition-all duration-300">
                                     <MessageSquare className="h-5 w-5 mr-3" />
                                     GỬI YÊU CẦU TƯ VẤN

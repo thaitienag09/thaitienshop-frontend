@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronRight, User, LogOut, LayoutDashboard, LogIn } from 'lucide-react';
+import { Menu, X, ChevronRight, User, LogOut, LayoutDashboard, LogIn, ClipboardList } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../config/firebase';
@@ -102,6 +102,14 @@ export default function Header() {
                                                     <span>Bảng điều khiển</span>
                                                 </Link>
                                             )}
+                                            <Link
+                                                to="/orders"
+                                                className="flex items-center space-x-3 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                                                onClick={() => setIsUserMenuOpen(false)}
+                                            >
+                                                <ClipboardList className="h-4 w-4 text-gray-400" />
+                                                <span>Đơn hàng của tôi</span>
+                                            </Link>
                                             <button
                                                 onClick={() => {
                                                     signOut(auth);
@@ -173,6 +181,15 @@ export default function Header() {
                                     <span>Trang quản trị</span>
                                 </Link>
                             )}
+
+                            <Link
+                                to="/orders"
+                                className="flex items-center space-x-3 text-lg font-bold text-gray-700 py-2"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                <ClipboardList className="h-5 w-5 text-gray-400" />
+                                <span>Đơn hàng của tôi</span>
+                            </Link>
 
                             <div className="pt-4 space-y-3">
                                 {currentUser ? (

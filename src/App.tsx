@@ -13,6 +13,7 @@ import OrderManagement from '@/pages/admin/Orders'
 import UserManagement from '@/pages/admin/Users'
 import ProductManagement from '@/pages/admin/Products'
 import ProductForm from '@/pages/admin/ProductForm'
+import OrdersHistory from '@/pages/OrdersHistory'
 
 // Layout for public pages with Header and Footer
 function PublicLayout() {
@@ -38,6 +39,11 @@ export default function App() {
                     <Route path="/projects" element={<DanhSachDoAn />} />
                     <Route path="/project/:id" element={<ChiTietDoAn />} />
                     <Route path="/auth" element={<Auth />} />
+                    <Route path="/orders" element={
+                        <ProtectedRoute>
+                            <OrdersHistory />
+                        </ProtectedRoute>
+                    } />
                     <Route path="/forgot-password" element={
                         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6 text-center">
                             <h1 className="text-3xl font-black text-primary mb-4">QUÊN MẬT KHẨU?</h1>
