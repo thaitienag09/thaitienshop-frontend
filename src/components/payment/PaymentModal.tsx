@@ -117,13 +117,13 @@ export default function PaymentModal({ isOpen, onClose, project }: PaymentModalP
     if (!isOpen) return null
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 sm:p-10">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 md:p-10">
             <div className="absolute inset-0 bg-primary/40 backdrop-blur-md" onClick={onClose}></div>
-            <div className="relative w-full max-w-2xl bg-white rounded-[2rem] md:rounded-[3rem] shadow-2xl overflow-y-auto max-h-[90vh] md:max-h-none animate-scale-in">
-                <div className="sticky top-0 right-0 z-10 flex justify-end p-4 md:absolute md:top-8 md:right-8">
+            <div className="relative w-full max-w-2xl bg-white rounded-2xl md:rounded-[3rem] shadow-2xl overflow-y-auto max-h-[95vh] md:max-h-[90vh] animate-scale-in">
+                <div className="sticky top-0 right-0 z-10 flex justify-end p-3 md:absolute md:top-8 md:right-8">
                     <button
                         onClick={onClose}
-                        className="p-3 bg-gray-100/80 backdrop-blur-sm hover:bg-gray-200 rounded-2xl text-gray-400 hover:text-primary transition-all shadow-sm"
+                        className="p-2 md:p-3 bg-gray-100/80 backdrop-blur-sm hover:bg-gray-200 rounded-xl md:rounded-2xl text-gray-400 hover:text-primary transition-all shadow-sm"
                     >
                         <X className="h-5 w-5" />
                     </button>
@@ -131,8 +131,8 @@ export default function PaymentModal({ isOpen, onClose, project }: PaymentModalP
 
                 {paymentStep === 1 && (
                     <div className="grid grid-cols-1 md:grid-cols-2">
-                        <div className="bg-gray-50 p-12 flex flex-col items-center justify-center border-r border-gray-100">
-                            <div className="bg-white p-6 rounded-[2.5rem] shadow-premium mb-8 w-full aspect-square flex items-center justify-center overflow-hidden">
+                        <div className="bg-gray-50 p-4 sm:p-6 md:p-12 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-gray-100">
+                            <div className="bg-white p-3 md:p-6 rounded-2xl md:rounded-[2.5rem] shadow-premium mb-4 md:mb-8 w-full max-w-[280px] md:max-w-none flex items-center justify-center overflow-hidden">
                                 <img
                                     src={`https://img.vietqr.io/image/VIB-913263053-compact2.png?amount=${project.price}&addInfo=${encodeURIComponent(userEmail + " " + project.title)}&accountName=DUONG%20THAI%20TIEN`}
                                     alt="VietQR Payment"
@@ -141,18 +141,18 @@ export default function PaymentModal({ isOpen, onClose, project }: PaymentModalP
                             </div>
                             <div className="text-center">
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 leading-none">Quét mã để thanh toán</p>
-                                <p className="text-xl font-black text-primary tracking-tighter">{project.price} VNĐ</p>
+                                <p className="text-lg md:text-xl font-black text-primary tracking-tighter">{project.price} VNĐ</p>
                             </div>
                         </div>
 
-                        <div className="p-12">
-                            <div className="mb-10">
-                                <h3 className="text-2xl font-black text-primary tracking-tighter uppercase mb-2">Thông tin chuyển khoản</h3>
-                                <p className="text-xs text-gray-500 font-medium italic">Vui lòng nhập email chính xác để nhận mã nguồn.</p>
+                        <div className="p-4 sm:p-6 md:p-12">
+                            <div className="mb-6 md:mb-10">
+                                <h3 className="text-lg md:text-2xl font-black text-primary tracking-tighter uppercase mb-2">Thông tin chuyển khoản</h3>
+                                <p className="text-[10px] md:text-xs text-gray-500 font-medium italic">Vui lòng nhập email chính xác để nhận mã nguồn.</p>
                             </div>
 
-                            <div className="space-y-6">
-                                <div className="p-6 bg-surface-muted rounded-3xl border border-gray-100 font-sans">
+                            <div className="space-y-4 md:space-y-6">
+                                <div className="p-4 md:p-6 bg-surface-muted rounded-2xl md:rounded-3xl border border-gray-100 font-sans">
                                     <p className="text-[10px] font-black text-primary uppercase mb-2 leading-none">VIB - NGÂN HÀNG QUỐC TẾ</p>
                                     <div className="flex items-center justify-between">
                                         <div>
@@ -186,7 +186,7 @@ export default function PaymentModal({ isOpen, onClose, project }: PaymentModalP
                                 <button
                                     onClick={handleConfirmPayment}
                                     disabled={!userEmail || isSubmitting}
-                                    className={`w-full py-5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center ${userEmail && !isSubmitting ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-premium' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                    className={`w-full py-3.5 md:py-5 rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center ${userEmail && !isSubmitting ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-premium' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                         }`}
                                 >
                                     {isSubmitting ? (
@@ -200,7 +200,7 @@ export default function PaymentModal({ isOpen, onClose, project }: PaymentModalP
                 )}
 
                 {paymentStep === 2 && (
-                    <div className="p-20 flex flex-col items-center justify-center text-center animate-fade-in">
+                    <div className="p-8 md:p-20 flex flex-col items-center justify-center text-center animate-fade-in">
                         <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-8 animate-bounce">
                             <CheckCircle className="h-12 w-12 text-green-500" />
                         </div>
@@ -215,15 +215,15 @@ export default function PaymentModal({ isOpen, onClose, project }: PaymentModalP
                 )}
 
                 {paymentStep === 3 && (
-                    <div className="p-20 flex flex-col items-center justify-center text-center animate-fade-in">
+                    <div className="p-6 md:p-20 flex flex-col items-center justify-center text-center animate-fade-in">
                         <div className="relative mb-10">
                             <div className="h-24 w-24 border-4 border-accent/20 border-t-accent rounded-full animate-spin"></div>
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <ShieldCheck className="h-10 w-10 text-accent animate-pulse" />
                             </div>
                         </div>
-                        <h3 className="text-3xl font-black text-primary tracking-tighter uppercase mb-4">Đang đợi Admin xác nhận</h3>
-                        <p className="text-gray-500 max-w-sm leading-relaxed mb-8 font-medium">
+                        <h3 className="text-xl md:text-3xl font-black text-primary tracking-tighter uppercase mb-4">Đang đợi Admin xác nhận</h3>
+                        <p className="text-sm md:text-base text-gray-500 max-w-sm leading-relaxed mb-6 md:mb-8 font-medium">
                             Hệ thống sẽ tự động cập nhật ngay khi Admin nhấn nút xác nhận trên bảng điều khiển Quản trị.
                         </p>
                         <div className="p-4 bg-gray-50 rounded-2xl flex flex-col items-center space-y-3 text-[10px] font-black text-gray-400 uppercase tracking-widest">
@@ -257,13 +257,13 @@ export default function PaymentModal({ isOpen, onClose, project }: PaymentModalP
                 )}
 
                 {paymentStep === 4 && (
-                    <div className="p-20 flex flex-col items-center justify-center text-center animate-scale-in">
-                        <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mb-10 shadow-glow">
-                            <CheckCircle className="h-12 w-12 text-white" />
+                    <div className="p-8 md:p-20 flex flex-col items-center justify-center text-center animate-scale-in">
+                        <div className="w-20 h-20 md:w-24 md:h-24 bg-green-500 rounded-full flex items-center justify-center mb-6 md:mb-10 shadow-glow">
+                            <CheckCircle className="h-10 w-10 md:h-12 md:w-12 text-white" />
                         </div>
-                        <h3 className="text-4xl font-black text-primary tracking-tighter uppercase mb-4">THANH TOÁN THÀNH CÔNG!</h3>
-                        <p className="text-gray-500 max-w-sm leading-relaxed mb-10 font-medium">
-                            Cảm ơn bạn đã ủng hộ! Mã nguồn đã được kích hoạt chuyển giao đến email: <span className="text-green-600 font-bold">{userEmail}</span>
+                        <h3 className="text-2xl md:text-4xl font-black text-primary tracking-tighter uppercase mb-4">THANH TOÁN THÀNH CÔNG!</h3>
+                        <p className="text-sm md:text-base text-gray-500 max-w-sm leading-relaxed mb-6 md:mb-10 font-medium">
+                            Cảm ơn bạn đã ủng hộ! Mã nguồn đã được kích hoạt chuyển giao đến email: <span className="text-green-600 font-bold break-all">{userEmail}</span>
                         </p>
                         <button
                             onClick={onClose}
@@ -275,9 +275,9 @@ export default function PaymentModal({ isOpen, onClose, project }: PaymentModalP
                 )}
 
                 {paymentStep === 5 && (
-                    <div className="p-20 flex flex-col items-center justify-center text-center animate-fade-in">
-                        <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mb-8">
-                            <AlertCircle className="h-12 w-12 text-red-500" />
+                    <div className="p-8 md:p-20 flex flex-col items-center justify-center text-center animate-fade-in">
+                        <div className="w-20 h-20 md:w-24 md:h-24 bg-red-50 rounded-full flex items-center justify-center mb-6 md:mb-8">
+                            <AlertCircle className="h-10 w-10 md:h-12 md:w-12 text-red-500" />
                         </div>
                         <h3 className="text-3xl font-black text-primary tracking-tighter uppercase mb-4">Xác nhận thất bại</h3>
                         <p className="text-gray-500 max-w-sm leading-relaxed mb-10 font-medium">

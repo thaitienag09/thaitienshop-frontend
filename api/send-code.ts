@@ -19,11 +19,15 @@ export default async function handler(req: any, res: any) {
             clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
             privateKey: process.env.FIREBASE_PRIVATE_KEY,
             databaseURL: process.env.FIREBASE_DATABASE_URL || process.env.VITE_FIREBASE_DATABASE_URL,
-            resendKey: process.env.RESEND_API_KEY
+            resendKey: process.env.RESEND_API_KEY,
+            fromEmail: process.env.RESEND_FROM_EMAIL || 'thaitienshop <onboarding@resend.dev>'
         };
 
-        const missing = Object.entries(config).filter(([k, v]) => !v).map(([k]) => k);
+        const missing = Object.entries(config)
+            .filter(([k, v]) => !v && k !== 'fromEmail')
+            .map(([k]) => k);
         if (missing.length > 0) {
+            console.error('❌ Missing env vars:', missing);
             return res.status(500).json({
                 error: `Thiếu cấu hình biến môi trường: ${missing.join(', ')}. Hãy kiểm tra Dashboard Vercel.`
             });
@@ -53,6 +57,7 @@ export default async function handler(req: any, res: any) {
         const resend = new Resend(config.resendKey);
 
         // 3. Lấy thông tin giao dịch
+        console.log('📋 Đang lấy giao dịch:', transactionId);
         const txSnapshot = await rtdb.ref(`transactions/${transactionId}`).once('value');
         const transaction = txSnapshot.val();
 
@@ -60,11 +65,14 @@ export default async function handler(req: any, res: any) {
             return res.status(404).json({ error: 'Không tìm thấy giao dịch trên Database.' });
         }
 
+        console.log('📋 Giao dịch:', { email: transaction.email, status: transaction.status, projectId: transaction.projectId });
+
         if (transaction.status !== 'success') {
             return res.status(400).json({ error: 'Giao dịch chưa được xác nhận thành công.' });
         }
 
         // 4. Lấy link mã nguồn
+        console.log('📦 Đang lấy sản phẩm:', transaction.projectId);
         const projectDoc = await firestore.collection('projects').doc(transaction.projectId).get();
         if (!projectDoc.exists) {
             return res.status(404).json({ error: 'Không tìm thấy sản phẩm tương ứng.' });
@@ -72,12 +80,13 @@ export default async function handler(req: any, res: any) {
 
         const sourceCodeUrl = projectDoc.data()?.sourceCodeUrl;
         if (!sourceCodeUrl) {
-            return res.status(400).json({ error: 'Sản phẩm này chưa được cấu hình Link mã nguồn.' });
+            return res.status(400).json({ error: 'Sản phẩm này chưa được cấu hình Link mã nguồn (sourceCodeUrl).' });
         }
 
         // 5. Gửi email
+        console.log('📧 Đang gửi email đến:', transaction.email, '| From:', config.fromEmail);
         const { data, error } = await resend.emails.send({
-            from: 'thaitienshop <onboarding@resend.dev>',
+            from: config.fromEmail,
             to: [transaction.email],
             subject: `[thaitienshop] Mã nguồn của bạn: ${transaction.projectName}`,
             html: `
