@@ -119,11 +119,11 @@ export default function PaymentModal({ isOpen, onClose, project }: PaymentModalP
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 sm:p-10">
             <div className="absolute inset-0 bg-primary/40 backdrop-blur-md" onClick={onClose}></div>
-            <div className="relative w-full max-w-2xl bg-white rounded-[3rem] shadow-2xl overflow-hidden animate-scale-in">
-                <div className="absolute top-8 right-8 z-10">
+            <div className="relative w-full max-w-2xl bg-white rounded-[2rem] md:rounded-[3rem] shadow-2xl overflow-y-auto max-h-[90vh] md:max-h-none animate-scale-in">
+                <div className="sticky top-0 right-0 z-10 flex justify-end p-4 md:absolute md:top-8 md:right-8">
                     <button
                         onClick={onClose}
-                        className="p-3 bg-gray-100 hover:bg-gray-200 rounded-2xl text-gray-400 hover:text-primary transition-all"
+                        className="p-3 bg-gray-100/80 backdrop-blur-sm hover:bg-gray-200 rounded-2xl text-gray-400 hover:text-primary transition-all shadow-sm"
                     >
                         <X className="h-5 w-5" />
                     </button>

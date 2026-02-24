@@ -30,15 +30,17 @@ export default async function handler(req: any, res: any) {
         }
 
         // 2. Khởi tạo Firebase Admin an toàn
-        const apps = admin.apps || [];
-        if (!apps.length) {
+        if (!admin.apps.length) {
             try {
+                // Sử dụng cấu trúc an toàn hơn cho Vercel Edge/Serverless
+                const serviceAccount = {
+                    projectId: config.projectId,
+                    clientEmail: config.clientEmail,
+                    privateKey: config.privateKey?.replace(/\\n/g, '\n'),
+                };
+
                 admin.initializeApp({
-                    credential: admin.credential.cert({
-                        projectId: config.projectId,
-                        clientEmail: config.clientEmail,
-                        privateKey: config.privateKey?.replace(/\\n/g, '\n'),
-                    }),
+                    credential: admin.credential.cert(serviceAccount as any),
                     databaseURL: config.databaseURL,
                 });
             } catch (initErr: any) {
