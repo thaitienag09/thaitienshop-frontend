@@ -60,7 +60,6 @@ export default function OrderManagement() {
                 updatedAt: Date.now()
             })
 
-            // Nếu xác nhận thành công, gọi API gửi mail tự động
             if (newStatus === 'success') {
                 console.log('📡 Đang gửi email tự động cho đơn hàng:', orderId)
                 const response = await fetch('/api/send-code', {
@@ -69,17 +68,23 @@ export default function OrderManagement() {
                     body: JSON.stringify({ transactionId: orderId })
                 })
 
-                const result = await response.json()
+                let result
+                try {
+                    result = await response.json()
+                } catch (e) {
+                    throw new Error('Máy chủ không phản hồi đúng định dạng JSON. Vui lòng kiểm tra lại cấu hình API trên Vercel.')
+                }
+
                 if (response.ok) {
                     alert('Đã xác nhận và gửi email thành công!')
                 } else {
                     console.error('Lỗi gửi mail:', result.error)
-                    alert(`Đã xác nhận trạng thái nhưng có lỗi gửi mail: ${result.error}`)
+                    alert(`Đã xác nhận trạng thái nhưng có lỗi gửi mail: ${result.error || 'Không xác định'}`)
                 }
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Lỗi cập nhật trạng thái:', error)
-            alert('Có lỗi xảy ra khi cập nhật trạng thái.')
+            alert(`Lỗi: ${error.message || 'Có lỗi xảy ra khi cập nhật trạng thái.'}`)
         }
     }
 
