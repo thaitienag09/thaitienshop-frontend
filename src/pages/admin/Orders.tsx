@@ -164,91 +164,150 @@ export default function OrderManagement() {
                         <p className="font-bold">Chưa có đơn hàng nào</p>
                     </div>
                 ) : (
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left">
-                            <thead className="bg-gray-50 text-gray-400 text-[10px] uppercase font-black tracking-widest border-b border-gray-100">
-                                <tr>
-                                    <th className="px-6 py-4">Mã Giao dịch</th>
-                                    <th className="px-6 py-4">Khách hàng</th>
-                                    <th className="px-6 py-4">Sản phẩm / Giá</th>
-                                    <th className="px-6 py-4">Thời gian</th>
-                                    <th className="px-6 py-4">Trạng thái</th>
-                                    <th className="px-6 py-4 text-center">Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100">
-                                {filteredOrders.map((order) => (
-                                    <tr key={order.id} className="hover:bg-blue-50/30 transition-colors group">
-                                        <td className="px-6 py-4">
-                                            <span className="text-sm font-bold text-gray-900 font-mono tracking-tight">{order.id}</span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex flex-col">
-                                                <span className="text-sm font-bold text-gray-900">{order.email}</span>
-                                                <span className="text-[10px] text-gray-400 font-medium">Customer ID: {order.userId || 'Guest'}</span>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex flex-col">
-                                                <span className="text-sm font-bold text-gray-900 truncate max-w-[200px]">{order.projectName}</span>
-                                                <div className="flex items-center space-x-2">
-                                                    <span className={`text-[10px] font-black ${productsMap[order.projectId] && Number(order.price) !== Number(productsMap[order.projectId])
-                                                        ? 'text-red-500 bg-red-50 px-2 py-0.5 rounded'
-                                                        : 'text-blue-600'
-                                                        }`}>
-                                                        {order.price}đ
-                                                    </span>
-                                                    {productsMap[order.projectId] && Number(order.price) !== Number(productsMap[order.projectId]) && (
-                                                        <div className="group relative">
-                                                            <AlertCircle className="h-3 w-3 text-red-500 animate-pulse cursor-help" />
-                                                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-48 p-2 bg-red-600 text-white text-[9px] font-bold rounded-lg shadow-xl z-50">
-                                                                CẢNH BÁO: Giá gốc là {productsMap[order.projectId]}đ. Khách hàng đã gửi giá sai!
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <span className="text-xs text-gray-500 font-medium">
-                                                {order.createdAt ? new Date(order.createdAt).toLocaleString('vi-VN') : 'Đang xử lý...'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 text-center">
-                                            <span className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider border ${getStatusStyle(order.status)}`}>
-                                                {order.status}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button
-                                                    onClick={() => handleUpdateStatus(order.id, 'success')}
-                                                    className="p-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-600 hover:text-white transition-all shadow-sm"
-                                                    title="Xác nhận"
-                                                >
-                                                    <CheckCircle className="h-4 w-4" />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleUpdateStatus(order.id, 'failed')}
-                                                    className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all shadow-sm"
-                                                    title="Hủy đơn"
-                                                >
-                                                    <XCircle className="h-4 w-4" />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDeleteOrder(order.id)}
-                                                    className="p-2 bg-gray-50 text-gray-500 rounded-lg hover:bg-red-600 hover:text-white transition-all shadow-sm"
-                                                    title="Xóa vĩnh viễn"
-                                                >
-                                                    <Trash2 className="h-4 w-4" />
-                                                </button>
-                                            </div>
-                                        </td>
+                    <>
+                        {/* Desktop View: Table */}
+                        <div className="hidden md:block overflow-x-auto">
+                            <table className="w-full text-left">
+                                <thead className="bg-gray-50 text-gray-400 text-[10px] uppercase font-black tracking-widest border-b border-gray-100">
+                                    <tr>
+                                        <th className="px-6 py-4">Mã Giao dịch</th>
+                                        <th className="px-6 py-4">Khách hàng</th>
+                                        <th className="px-6 py-4">Sản phẩm / Giá</th>
+                                        <th className="px-6 py-4">Thời gian</th>
+                                        <th className="px-6 py-4">Trạng thái</th>
+                                        <th className="px-6 py-4 text-center">Thao tác</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody className="divide-y divide-gray-100">
+                                    {filteredOrders.map((order) => (
+                                        <tr key={order.id} className="hover:bg-blue-50/30 transition-colors group">
+                                            <td className="px-6 py-4">
+                                                <span className="text-sm font-bold text-gray-900 font-mono tracking-tight">{order.id}</span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex flex-col">
+                                                    <span className="text-sm font-bold text-gray-900">{order.email}</span>
+                                                    <span className="text-[10px] text-gray-400 font-medium">Customer ID: {order.userId || 'Guest'}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex flex-col">
+                                                    <span className="text-sm font-bold text-gray-900 truncate max-w-[200px]">{order.projectName}</span>
+                                                    <div className="flex items-center space-x-2">
+                                                        <span className={`text-[10px] font-black ${productsMap[order.projectId] && Number(order.price) !== Number(productsMap[order.projectId])
+                                                            ? 'text-red-500 bg-red-50 px-2 py-0.5 rounded'
+                                                            : 'text-blue-600'
+                                                            }`}>
+                                                            {order.price}đ
+                                                        </span>
+                                                        {productsMap[order.projectId] && Number(order.price) !== Number(productsMap[order.projectId]) && (
+                                                            <div className="group relative">
+                                                                <AlertCircle className="h-3 w-3 text-red-500 animate-pulse cursor-help" />
+                                                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-48 p-2 bg-red-600 text-white text-[9px] font-bold rounded-lg shadow-xl z-50">
+                                                                    CẢNH BÁO: Giá gốc là {productsMap[order.projectId]}đ. Khách hàng đã gửi giá sai!
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <span className="text-xs text-gray-500 font-medium">
+                                                    {order.createdAt ? new Date(order.createdAt).toLocaleString('vi-VN') : 'Đang xử lý...'}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4 text-center">
+                                                <span className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider border ${getStatusStyle(order.status)}`}>
+                                                    {order.status}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <button
+                                                        onClick={() => handleUpdateStatus(order.id, 'success')}
+                                                        className="p-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-600 hover:text-white transition-all shadow-sm"
+                                                        title="Xác nhận"
+                                                    >
+                                                        <CheckCircle className="h-4 w-4" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleUpdateStatus(order.id, 'failed')}
+                                                        className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all shadow-sm"
+                                                        title="Hủy đơn"
+                                                    >
+                                                        <XCircle className="h-4 w-4" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDeleteOrder(order.id)}
+                                                        className="p-2 bg-gray-50 text-gray-500 rounded-lg hover:bg-red-600 hover:text-white transition-all shadow-sm"
+                                                        title="Xóa vĩnh viễn"
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Mobile View: Cards */}
+                        <div className="md:hidden divide-y divide-gray-100">
+                            {filteredOrders.map((order) => (
+                                <div key={order.id} className="p-4 space-y-4">
+                                    <div className="flex justify-between items-start">
+                                        <div className="space-y-1">
+                                            <p className="text-xs font-black text-gray-400 font-mono tracking-tight">{order.id}</p>
+                                            <h4 className="text-sm font-black text-gray-900 leading-tight">{order.projectName}</h4>
+                                            <div className="flex items-center space-x-2">
+                                                <span className={`text-[10px] font-black ${productsMap[order.projectId] && Number(order.price) !== Number(productsMap[order.projectId])
+                                                    ? 'text-red-500 bg-red-50 px-2 py-0.5 rounded'
+                                                    : 'text-blue-600'
+                                                    }`}>
+                                                    {order.price}đ
+                                                </span>
+                                                {productsMap[order.projectId] && Number(order.price) !== Number(productsMap[order.projectId]) && (
+                                                    <AlertCircle className="h-3 w-3 text-red-500" />
+                                                )}
+                                            </div>
+                                        </div>
+                                        <span className={`px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-wider border ${getStatusStyle(order.status)}`}>
+                                            {order.status}
+                                        </span>
+                                    </div>
+
+                                    <div className="flex flex-col space-y-1">
+                                        <p className="text-xs font-bold text-gray-700">{order.email}</p>
+                                        <p className="text-[10px] text-gray-400">{order.createdAt ? new Date(order.createdAt).toLocaleString('vi-VN') : 'Đang xử lý...'}</p>
+                                    </div>
+
+                                    <div className="flex items-center gap-2 pt-2">
+                                        <button
+                                            onClick={() => handleUpdateStatus(order.id, 'success')}
+                                            className="flex-1 py-2.5 bg-green-50 text-green-600 rounded-xl font-bold text-[10px] uppercase tracking-wider flex items-center justify-center gap-2"
+                                        >
+                                            <CheckCircle className="h-3.5 w-3.5" />
+                                            Duyệt
+                                        </button>
+                                        <button
+                                            onClick={() => handleUpdateStatus(order.id, 'failed')}
+                                            className="flex-1 py-2.5 bg-red-50 text-red-600 rounded-xl font-bold text-[10px] uppercase tracking-wider flex items-center justify-center gap-2"
+                                        >
+                                            <XCircle className="h-3.5 w-3.5" />
+                                            Hủy
+                                        </button>
+                                        <button
+                                            onClick={() => handleDeleteOrder(order.id)}
+                                            className="p-2.5 bg-gray-50 text-gray-400 rounded-xl"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </>
                 )}
             </div>
         </div>

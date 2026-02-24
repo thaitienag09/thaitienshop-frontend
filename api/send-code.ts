@@ -30,7 +30,8 @@ export default async function handler(req: any, res: any) {
         }
 
         // 2. Khởi tạo Firebase Admin an toàn
-        if (!admin.apps.length) {
+        const apps = admin.apps || [];
+        if (!apps.length) {
             try {
                 admin.initializeApp({
                     credential: admin.credential.cert({
