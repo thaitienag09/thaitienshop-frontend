@@ -14,7 +14,10 @@ export default function OrdersHistory() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        if (!currentUser) return
+        if (!currentUser) {
+            setLoading(false)
+            return
+        }
 
         const transactionsRef = ref(db, 'transactions')
         const userQuery = query(
