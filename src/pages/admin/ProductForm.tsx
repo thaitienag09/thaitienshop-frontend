@@ -30,6 +30,8 @@ const CATEGORIES = [
 const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
 const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
 
+console.log('Cloudinary Config:', { name: CLOUDINARY_CLOUD_NAME, preset: CLOUDINARY_UPLOAD_PRESET });
+
 interface ProductFormData extends Omit<Project, 'id' | 'createdAt' | 'updatedAt'> {
     id?: string;
 }

@@ -59,60 +59,56 @@ export default function PaymentModal({ isOpen, onClose, project }: PaymentModalP
         }
     }, [paymentStep, onClose])
 
+    // Tự động tạo mã giao dịch và lưu vào Firebase ngay khi mở modal
     useEffect(() => {
-        if (!isOpen) {
-            const now = Date.now()
-            const cooldown = 5 * 60 * 1000
-            if (now - lastSubmittedAt < cooldown && transactionId) {
-                setPaymentStep(3)
-            } else {
-                setPaymentStep(1)
+        const initTransaction = async () => {
+            if (isOpen && !isSubmitting && paymentStep === 1) {
+                // Kiểm tra xem đã có giao dịch còn hiệu lực trong localStorage không
+                const savedTxId = localStorage.getItem(`last_tx_id_${project.id}`);
+                const savedSTime = Number(localStorage.getItem(`last_submit_${project.id}`));
+                const now = Date.now();
+                const cooldown = 5 * 60 * 1000;
+
+                if (savedTxId && (now - savedSTime < cooldown)) {
+                    setTransactionId(savedTxId);
+                    setLastSubmittedAt(savedSTime);
+                    setPaymentStep(3); // Chuyển thẳng sang bước đợi xác nhận
+                    return;
+                }
+
+                // Nếu chưa có hoặc đã hết hạn, tạo mới
+                const newId = `TX${now.toString().slice(-6)}${Math.floor(Math.random() * 1000)}`;
+                setTransactionId(newId);
+                setIsSubmitting(true);
+
+                try {
+                    const txRef = ref(db, `transactions/${newId}`);
+                    await set(txRef, {
+                        id: newId,
+                        email: userEmail,
+                        projectId: project.id,
+                        projectName: project.title,
+                        price: project.price,
+                        status: 'pending',
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp(),
+                        userId: currentUser?.uid
+                    });
+
+                    localStorage.setItem(`last_submit_${project.id}`, String(now));
+                    localStorage.setItem(`last_tx_id_${project.id}`, newId);
+                    setLastSubmittedAt(now);
+                    setPaymentStep(3); // Tự động chuyển sang trạng thái chờ xác thực ngay khi hiện mã QR
+                } catch (error) {
+                    console.error('Lỗi khởi tạo giao dịch:', error);
+                } finally {
+                    setIsSubmitting(false);
+                }
             }
-        }
-    }, [isOpen, lastSubmittedAt, project.id, paymentStep])
+        };
 
-    const handleConfirmPayment = async () => {
-        const now = Date.now()
-        const cooldown = 5 * 60 * 1000
-        if (now - lastSubmittedAt < cooldown) {
-            setPaymentStep(3)
-            return
-        }
-
-        setIsSubmitting(true)
-        const newTransactionId = `TX${now.toString().slice(-6)}${Math.floor(Math.random() * 1000)}`
-        setTransactionId(newTransactionId)
-
-        try {
-            const txRef = ref(db, `transactions/${newTransactionId}`)
-
-            await set(txRef, {
-                id: newTransactionId,
-                email: userEmail,
-                projectId: project.id,
-                projectName: project.title,
-                price: project.price,
-                status: 'pending',
-                createdAt: serverTimestamp(),
-                updatedAt: serverTimestamp(),
-                userId: currentUser?.uid
-            })
-
-            localStorage.setItem(`last_submit_${project.id}`, String(now))
-            localStorage.setItem(`last_tx_id_${project.id}`, newTransactionId)
-            setLastSubmittedAt(now)
-
-            setPaymentStep(2)
-            setTimeout(() => setPaymentStep(3), 3000)
-
-        } catch (error) {
-            console.error('Lỗi lưu giao dịch vào Firebase:', error)
-            alert('Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại.')
-            setPaymentStep(1)
-        } finally {
-            setIsSubmitting(false)
-        }
-    }
+        initTransaction();
+    }, [isOpen]);
 
     if (!isOpen) return null
 
@@ -129,26 +125,38 @@ export default function PaymentModal({ isOpen, onClose, project }: PaymentModalP
                     </button>
                 </div>
 
-                {paymentStep === 1 && (
+                {(paymentStep === 1 || paymentStep === 3) && (
                     <div className="grid grid-cols-1 md:grid-cols-2">
                         <div className="bg-gray-50 p-4 sm:p-6 md:p-12 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-gray-100">
                             <div className="bg-white p-3 md:p-6 rounded-2xl md:rounded-[2.5rem] shadow-premium mb-4 md:mb-8 w-full max-w-[280px] md:max-w-none flex items-center justify-center overflow-hidden">
-                                <img
-                                    src={`https://img.vietqr.io/image/VIB-913263053-compact2.png?amount=${project.price}&addInfo=${encodeURIComponent(userEmail + " " + project.title)}&accountName=DUONG%20THAI%20TIEN`}
-                                    alt="VietQR Payment"
-                                    className="w-full h-auto"
-                                />
+                                {transactionId ? (
+                                    <img
+                                        src={`https://img.vietqr.io/image/VIB-913263053-compact2.png?amount=${project.price}&addInfo=${transactionId}&accountName=DUONG%20THAI%20TIEN`}
+                                        alt="VietQR Payment"
+                                        className="w-full h-auto"
+                                    />
+                                ) : (
+                                    <div className="h-64 flex items-center justify-center">
+                                        <div className="h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                                    </div>
+                                )}
                             </div>
                             <div className="text-center">
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 leading-none">Quét mã để thanh toán</p>
                                 <p className="text-lg md:text-xl font-black text-primary tracking-tighter">{project.price} VNĐ</p>
+                                {transactionId && (
+                                    <div className="mt-4 p-2 bg-blue-50 rounded-xl border border-blue-100">
+                                        <p className="text-[8px] font-black text-blue-600 uppercase tracking-widest leading-none mb-1">Nội dung chuyển khoản</p>
+                                        <p className="text-sm font-black text-blue-700">{transactionId}</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
                         <div className="p-4 sm:p-6 md:p-12">
                             <div className="mb-6 md:mb-10">
-                                <h3 className="text-lg md:text-2xl font-black text-primary tracking-tighter uppercase mb-2">Thông tin chuyển khoản</h3>
-                                <p className="text-[10px] md:text-xs text-gray-500 font-medium italic">Vui lòng nhập email chính xác để nhận mã nguồn.</p>
+                                <h3 className="text-lg md:text-2xl font-black text-primary tracking-tighter uppercase mb-2">Thông tin thanh toán</h3>
+                                <p className="text-[10px] md:text-xs text-gray-500 font-medium italic">Hệ thống đang tự động kiểm tra giao dịch của bạn.</p>
                             </div>
 
                             <div className="space-y-4 md:space-y-6">
@@ -180,19 +188,28 @@ export default function PaymentModal({ isOpen, onClose, project }: PaymentModalP
                                             {userEmail}
                                         </div>
                                     </div>
-                                    <p className="text-[9px] text-gray-400 italic ml-2 mt-1">* Email dùng để xác định tài khoản thanh toán.</p>
+                                </div>
+
+                                <div className="p-6 bg-blue-600 rounded-2xl shadow-premium flex flex-col items-center justify-center space-y-3 animate-pulse">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="h-2 w-2 bg-white rounded-full animate-ping"></div>
+                                        <span className="text-white font-black text-[10px] md:text-xs uppercase tracking-widest">Đang chờ thanh toán...</span>
+                                    </div>
+                                    <p className="text-[9px] text-blue-100 text-center">Web sẽ tự động cập nhật ngay khi bạn chuyển tiền thành công.</p>
                                 </div>
 
                                 <button
-                                    onClick={handleConfirmPayment}
-                                    disabled={!userEmail || isSubmitting}
-                                    className={`w-full py-3.5 md:py-5 rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center ${userEmail && !isSubmitting ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-premium' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                        }`}
+                                    onClick={() => {
+                                        localStorage.removeItem(`last_submit_${project.id}`)
+                                        localStorage.removeItem(`last_tx_id_${project.id}`)
+                                        setLastSubmittedAt(0)
+                                        setTransactionId(null)
+                                        setPaymentStep(1)
+                                        window.location.reload()
+                                    }}
+                                    className="w-full text-center text-[9px] font-bold text-gray-400 uppercase hover:text-red-500 transition-colors"
                                 >
-                                    {isSubmitting ? (
-                                        <div className="h-4 w-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin mr-2"></div>
-                                    ) : <Zap className="h-4 w-4 mr-2" />}
-                                    {isSubmitting ? 'ĐANG GỬI...' : 'TÔI ĐÃ CHUYỂN KHOẢN'}
+                                    Làm mới hoặc Hủy bỏ giao dịch này
                                 </button>
                             </div>
                         </div>
