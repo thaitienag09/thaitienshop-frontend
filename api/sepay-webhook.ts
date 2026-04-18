@@ -8,13 +8,19 @@ export default async function handler(req: any, res: any) {
 
     try {
         console.log('--- SEPAY WEBHOOK START ---');
-        
-        // 1. Xác thực Secret Key
-        const authHeader = req.headers.authorization;
-        const secretKey = process.env.SEPAY_SECRET_KEY;
+        console.log('Headers:', JSON.stringify(req.headers));
 
-        if (!authHeader || authHeader !== `Bearer ${secretKey}`) {
-            console.error('❌ Sai Secret Key hoặc thiếu Authorization header');
+        // 1. Xác thực Secret Key (SePay gửi qua Authorization: Bearer hoặc apikey header)
+        const secretKey = process.env.SEPAY_SECRET_KEY;
+        const authHeader = req.headers.authorization;
+        const apikeyHeader = req.headers['apikey'] || req.headers['x-api-key'];
+
+        const isValidBearer = authHeader === `Bearer ${secretKey}`;
+        const isValidApiKey = apikeyHeader === secretKey;
+
+        // Nếu không có secretKey thì bỏ qua xác thực (demo mode)
+        if (secretKey && !isValidBearer && !isValidApiKey) {
+            console.error('❌ Xác thực thất bại. Auth:', authHeader, 'ApiKey:', apikeyHeader);
             return res.status(401).json({ error: 'Unauthorized' });
         }
 
